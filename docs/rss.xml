@@ -1,7 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>KNeeg的博客</title><link>https://KNeegcyao.github.io</link><description>准备实习的大三学生</description><copyright>KNeeg的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/115809019?v=4</url><title>avatar</title><link>https://KNeegcyao.github.io</link></image><lastBuildDate>Sun, 10 Nov 2024 05:11:13 +0000</lastBuildDate><managingEditor>KNeeg的博客</managingEditor><ttl>60</ttl><webMaster>KNeeg的博客</webMaster><item><title>Spring</title><link>https://KNeegcyao.github.io/post/Spring.html</link><description>ioc&#13;
-Spring是一个开源的免费的框架（容器）！&#13;
-Spring是一个轻量级的、非入侵式的框架！&#13;
-控制反转（IOC），面向切面编程（AOP）！&#13;
-支持事务的处理，对框架整合的支持！&#13;
-总结一句话：Spring就是一个轻量级的控制反转（IOC）和面向切面编程（AOP）的框架！。</description><guid isPermaLink="true">https://KNeegcyao.github.io/post/Spring.html</guid><pubDate>Sun, 10 Nov 2024 04:11:05 +0000</pubDate></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>KNeeg的博客</title><link>https://KNeegcyao.github.io</link><description>准备实习的大三学生</description><copyright>KNeeg的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/115809019?v=4</url><title>avatar</title><link>https://KNeegcyao.github.io</link></image><lastBuildDate>Tue, 12 Nov 2024 13:52:05 +0000</lastBuildDate><managingEditor>KNeeg的博客</managingEditor><ttl>60</ttl><webMaster>KNeeg的博客</webMaster><item><title>Spring</title><link>https://KNeegcyao.github.io/post/Spring.html</link><description># Spring介绍&#13;
+&#13;
+## Spring是一个IOC（DI）和AOP框架&#13;
+###  Sprng的优良特性&#13;
+  ·非侵入式：基于Spring开发的应用中的对象可以不依赖于Spring的API&#13;
+  ·依赖注入：DI是控制反转（IOC）最经典的实现&#13;
+  ·面向切面编程：AOP&#13;
+  ·组件化：Spring通过众多简单的组件配置组合成一个复杂应用&#13;
+  ·一站化：Spring提供了一系列框架，解决了应用开发中的众多问题&#13;
+&#13;
+## Spring模块划分&#13;
+![image-20241112170617466](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112170617466.png)&#13;
+&#13;
+&#13;
+![image-20241112170718867](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112170718867.png)&#13;
+&#13;
+&#13;
+# Spring-IOC容器&#13;
+&#13;
+## 组件和容器&#13;
+  ·组件：具有一定功能的对象。</description><guid isPermaLink="true">https://KNeegcyao.github.io/post/Spring.html</guid><pubDate>Sun, 10 Nov 2024 04:30:55 +0000</pubDate></item></channel></rss>
