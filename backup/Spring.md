@@ -347,4 +347,4 @@ private UserInfo user;
 
 ## @Bean的生命周期
 
-![image-20241112212824396](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112212824396.png)
+![image](https://github.com/user-attachments/assets/cf715aae-db48-4238-9e43-9c6d2c98d335)
