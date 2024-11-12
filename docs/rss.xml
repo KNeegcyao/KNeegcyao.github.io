@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>KNeeg的博客</title><link>https://KNeegcyao.github.io</link><description>准备实习的大三学生</description><copyright>KNeeg的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/115809019?v=4</url><title>avatar</title><link>https://KNeegcyao.github.io</link></image><lastBuildDate>Tue, 12 Nov 2024 13:52:05 +0000</lastBuildDate><managingEditor>KNeeg的博客</managingEditor><ttl>60</ttl><webMaster>KNeeg的博客</webMaster><item><title>Spring</title><link>https://KNeegcyao.github.io/post/Spring.html</link><description># Spring介绍&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>KNeeg的博客</title><link>https://KNeegcyao.github.io</link><description>准备实习的大三学生</description><copyright>KNeeg的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/115809019?v=4</url><title>avatar</title><link>https://KNeegcyao.github.io</link></image><lastBuildDate>Tue, 12 Nov 2024 14:05:00 +0000</lastBuildDate><managingEditor>KNeeg的博客</managingEditor><ttl>60</ttl><webMaster>KNeeg的博客</webMaster><item><title>Spring</title><link>https://KNeegcyao.github.io/post/Spring.html</link><description># Spring介绍&#13;
 &#13;
 ## Spring是一个IOC（DI）和AOP框架&#13;
 ###  Sprng的优良特性&#13;
@@ -10,11 +10,11 @@
   ·一站化：Spring提供了一系列框架，解决了应用开发中的众多问题&#13;
 &#13;
 ## Spring模块划分&#13;
-![image-20241112170617466](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112170617466.png)&#13;
+![image](https://github.com/user-attachments/assets/a427b517-8fca-4204-a3b7-cf7e87c29937)&#13;
 &#13;
 &#13;
-![image-20241112170718867](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112170718867.png)&#13;
 &#13;
+![image](https://github.com/user-attachments/assets/455d1c44-9933-4e6f-a011-fcae8305ffc4)&#13;
 &#13;
 # Spring-IOC容器&#13;
 &#13;

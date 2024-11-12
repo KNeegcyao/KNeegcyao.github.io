@@ -9,11 +9,11 @@
   ·一站化：Spring提供了一系列框架，解决了应用开发中的众多问题
 
 ## Spring模块划分
-![image-20241112170617466](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112170617466.png)
+![image](https://github.com/user-attachments/assets/a427b517-8fca-4204-a3b7-cf7e87c29937)
 
 
-![image-20241112170718867](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112170718867.png)
 
+![image](https://github.com/user-attachments/assets/455d1c44-9933-4e6f-a011-fcae8305ffc4)
 
 # Spring-IOC容器
 
