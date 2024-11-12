@@ -29,8 +29,7 @@
  常见的容器：**Servlet 容器**（如 Tomcat、Jetty）：用于管理和运行 Java Web 应用，处理 HTTP 请求和响应。
 ​                      **Docker 容器**：用于封装应用及其依赖的环境，确保应用能够在不同平台上运行一致。
 
-![image-20241112171601414](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112171601414.png)
-
+![image](https://github.com/user-attachments/assets/8387f0b9-cd20-44c9-84ad-7ce77f8208ee)
 ## IOC和DI
 ### **IOC：Inversion of Control（控制反转）**
 **控制**：资源的控制权（资源的创建、获取、销毁等）
