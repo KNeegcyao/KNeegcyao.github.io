@@ -89,7 +89,7 @@ public class UserService {
         }
 ```
 
-### **1.通过@Bean **
+### **1.通过@Bean**
 多应用在方法上
 Spring 4后推荐我们使用Java Config的方式来注册组件。**@Configuration**是 Spring 框架中的一个注解，用于标记一个类为 配置类，相当于 Spring XML 配置文件的替代方式。被 **@Configuration** 标记的类可以用来定义 Bean，并将它们注册到 Spring 的 IoC 容器中。
 告诉 Spring 该类包含了 一个或多个 @Bean 方法，这些方法会生成所需的 Bean，并注册到容器中以便在整个应用中共享
