@@ -348,3 +348,160 @@ private UserInfo user;
 ## @Bean的生命周期
 
 ![image](https://github.com/user-attachments/assets/cf715aae-db48-4238-9e43-9c6d2c98d335)
+
+---------------------------------------------------------------------------------------------------------------
+# Spring-AOP
+
+## 什么是AOP
+Spring AOP（Aspect-Oriented Programming）是Spring框架提供的一种面向切面编程的技术。它通过将横切关注点（例如日志记录、事务管理、安全性检查等）从主业务逻辑代码中分离出来，以模块化的方式实现对这些关注点的管理和重用。
+
+在Spring AOP中，切面（Aspect）是一个模块化的关注点，它可以跨越多个对象，例如日志记录、事务管理等。切面通过定义切点（Pointcut）和增强（Advice）来介入目标对象的方法执行过程。
+
+切点是一个表达式，用于匹配目标对象的一组方法，在这些方法执行时切面会被触发。增强则定义了切面在目标对象方法执行前、执行后或抛出异常时所要执行的逻辑。
+
+Spring AOP提供了以下几种类型的增强：
+
+前置增强（Before Advice）：在目标方法执行之前执行的逻辑。
+后置增强（After Advice）：在目标方法执行之后执行的逻辑，不管目标方法是否抛出异常。
+返回增强（After Returning Advice）：在目标方法正常返回时执行的逻辑。
+异常增强（After Throwing Advice）：在目标方法抛出异常时执行的逻辑。
+环绕增强（Around Advice）：在目标方法执行前后都可以执行的逻辑，它可以完全控制目标方法的执行。
+Spring AOP通过使用动态代理技术，在目标对象方法执行时将切面的逻辑织入到目标对象的方法中。这样，我们可以在不修改原始业务代码的情况下，实现横切关注点的统一处理。
+
+总而言之，Spring AOP是一种通过切面将横切关注点模块化的技术，它提供了一种简洁的方式来管理和重用跨越多个对象的关注点逻辑。
+
+## 为什么要用AOP
+**模块化**：Spring AOP将横切关注点从主业务逻辑代码中分离出来，以模块化的方式实现对这些关注点的管理和重用。这样，我们可以更容易地维护代码，并且可以将同一个关注点的逻辑应用到多个方法或类中。
+
+**非侵入式**：使用Spring AOP时，我们不需要修改原始业务逻辑代码，只需要在切点和增强中定义我们所需要的逻辑即可。这样，我们可以保持原始代码的简洁性和可读性。
+
+**可重用性**：我们可以将同一个切面应用于多个目标对象进行横切处理。这样，我们可以提高代码的重用性，并且可以更加方便地维护和更新切面逻辑。
+
+**松耦合**：AOP可以减少各个业务模块之间的耦合度，这是因为我们可以将某些通用的逻辑作为切面来实现，而不是直接在各个业务模块中实现。这样可以使得各个业务模块之间更加独立，从而提高代码的可维护性。
+
+在Spring AOP中，我们可以定义切面（Aspect），切面由切点（Pointcut）、通知（Advice）和连接点（Joinpoint）组成。切点定义了哪些连接点会被切面所影响，通知定义了在切点处执行的逻辑，而连接点则表示程序执行过程中的某个特定点。
+
+Spring AOP的工作原理是通过动态代理的方式，在运行时将切面逻辑织入到目标对象的方法中，从而实现对横切关注点的处理。
+
+# AOP场景
+场景设计
+设计：编写一个计算器接口和实现类，提供加减乘除四则运算
+需求：在加减乘除运算的时候需要记录操作日志（运算前参数、运算后结果）
+实现：
+*静态代理*
+*动态代理*
+***AOP***
+
+## 专业术语
+![image-20241115220025476](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115220025476.png)
+
+**切入点表达式**
+![image-20241115231646291](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115231646291.png)
+
+![image-20241115232431387](C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115232431387.png)
+
+## 单切面执行顺序
+```java
+@Component
+@Aspect//告诉spring这个组件是个切面
+public class LogAspect {
+    @Pointcut("execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))")
+    public void pointCut(){};
+
+    @Before("execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))")
+    public void logStart(){
+        System.out.println("【切面-日志】开始...");
+    }
+    
+    @After("execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))")
+     public void logEnd(){
+         System.out.println("【切面-日志】结束...");
+     }
+     
+     @AfterReturning(value = "execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))",
+     returning = "result")
+     public void logReturn(JoinPoint joinPoint,Object result){
+         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+         String name = signature.getName();
+         System.out.println("【切面-日志】【"+name+"】结果："+result);
+     }
+     
+     @AfterThrowing(value = "pointCut()",
+     throwing = "e"
+     )
+     public void logException(JoinPoint joinPoint,Exception e){
+         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+         String name = signature.getName();
+         System.out.println("【切面-日志】【"+name+"】异常：错误信息：【+"+e.getMessage()+"】");
+     }
+}
+```
+
+<img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115221506766.png" alt="image-20241115221506766" style="zoom:67%;" />
+
+
+
+
+
+## 多切面执行顺序
+
+•按照切面的优先级，优先级越高，越先执行，越是代理的最外层
+
+按首字母排序
+自定义：加上@Order（） 数字越小，优先级最高
+
+```java
+@Component
+@Aspect
+public class AuthAspect {
+    @Pointcut("execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))")
+    public void pointCut(){};
+    @Before("pointCut()")
+    public void logStart(){
+        System.out.println("【切面-认证】开始...");
+    }
+    @After("pointCut()")
+    public void logEnd(){
+        System.out.println("【切面-认证】结束...");
+    }
+}
+```
+
+
+
+<img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115222716726.png" alt="image-20241115222716726" style="zoom: 50%;" />
+
+
+
+* 环绕通知固定写法如下
+* object：返回值
+* ProceedingJoinPoint：可以继续推进的切点
+```java
+@Component
+@Aspect
+public class AroundAspect {
+    @Pointcut("execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))")
+    public void pointcut(){}
+
+    @Around("pointcut()")
+    public Object aroundAdvice(ProceedingJoinPoint pjp) throws Throwable {
+        Object[] args = pjp.getArgs();//获取目标方法的参数
+        System.out.println("环绕-前置通知"+ Arrays.toString(args));
+        //接收传入参数的proceed，实现修改目标方法执行用的参数
+        Object proceed = null;//执行目标方法；相当于反射method.invoke()
+        try {
+            proceed = pjp. proceed(args);
+            System.out.println("环绕-返回通知"+proceed);
+        } catch (Exception e) {
+            System.out.println("环绕-异常通知"+e.getMessage());
+            throw e;   //这里要抛出异常，不抛出事务不会回滚。
+        }finally {
+            System.out.println("环绕-后置通知");
+        }
+        //修改返回值
+        return proceed;
+    }
+}
+```
+
+<img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115231109284.png" alt="image-20241115231109284" style="zoom:67%;" /> 

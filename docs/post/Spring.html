@@ -396,7 +396,126 @@ public class WebConfig {</p>
 <strong>5.编译器提示不同</strong><br>
 当使用 IDEA 专业版在编写依赖注入的代码时，如果注入的是 Mapper 对象，那么使用 <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/Autowired/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/Autowired">@Autowired</a> 编译器会提示报错信息</p>
 <h2><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/bean/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/bean">@bean</a>的生命周期</h2>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/cf715aae-db48-4238-9e43-9c6d2c98d335"><img src="https://github.com/user-attachments/assets/cf715aae-db48-4238-9e43-9c6d2c98d335" alt="image" style="max-width: 100%;"></a></p></div>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/cf715aae-db48-4238-9e43-9c6d2c98d335"><img src="https://github.com/user-attachments/assets/cf715aae-db48-4238-9e43-9c6d2c98d335" alt="image" style="max-width: 100%;"></a></p>
+<hr>
+<h1>Spring-AOP</h1>
+<h2>什么是AOP</h2>
+<p>Spring AOP（Aspect-Oriented Programming）是Spring框架提供的一种面向切面编程的技术。它通过将横切关注点（例如日志记录、事务管理、安全性检查等）从主业务逻辑代码中分离出来，以模块化的方式实现对这些关注点的管理和重用。</p>
+<p>在Spring AOP中，切面（Aspect）是一个模块化的关注点，它可以跨越多个对象，例如日志记录、事务管理等。切面通过定义切点（Pointcut）和增强（Advice）来介入目标对象的方法执行过程。</p>
+<p>切点是一个表达式，用于匹配目标对象的一组方法，在这些方法执行时切面会被触发。增强则定义了切面在目标对象方法执行前、执行后或抛出异常时所要执行的逻辑。</p>
+<p>Spring AOP提供了以下几种类型的增强：</p>
+<p>前置增强（Before Advice）：在目标方法执行之前执行的逻辑。<br>
+后置增强（After Advice）：在目标方法执行之后执行的逻辑，不管目标方法是否抛出异常。<br>
+返回增强（After Returning Advice）：在目标方法正常返回时执行的逻辑。<br>
+异常增强（After Throwing Advice）：在目标方法抛出异常时执行的逻辑。<br>
+环绕增强（Around Advice）：在目标方法执行前后都可以执行的逻辑，它可以完全控制目标方法的执行。<br>
+Spring AOP通过使用动态代理技术，在目标对象方法执行时将切面的逻辑织入到目标对象的方法中。这样，我们可以在不修改原始业务代码的情况下，实现横切关注点的统一处理。</p>
+<p>总而言之，Spring AOP是一种通过切面将横切关注点模块化的技术，它提供了一种简洁的方式来管理和重用跨越多个对象的关注点逻辑。</p>
+<h2>为什么要用AOP</h2>
+<p><strong>模块化</strong>：Spring AOP将横切关注点从主业务逻辑代码中分离出来，以模块化的方式实现对这些关注点的管理和重用。这样，我们可以更容易地维护代码，并且可以将同一个关注点的逻辑应用到多个方法或类中。</p>
+<p><strong>非侵入式</strong>：使用Spring AOP时，我们不需要修改原始业务逻辑代码，只需要在切点和增强中定义我们所需要的逻辑即可。这样，我们可以保持原始代码的简洁性和可读性。</p>
+<p><strong>可重用性</strong>：我们可以将同一个切面应用于多个目标对象进行横切处理。这样，我们可以提高代码的重用性，并且可以更加方便地维护和更新切面逻辑。</p>
+<p><strong>松耦合</strong>：AOP可以减少各个业务模块之间的耦合度，这是因为我们可以将某些通用的逻辑作为切面来实现，而不是直接在各个业务模块中实现。这样可以使得各个业务模块之间更加独立，从而提高代码的可维护性。</p>
+<p>在Spring AOP中，我们可以定义切面（Aspect），切面由切点（Pointcut）、通知（Advice）和连接点（Joinpoint）组成。切点定义了哪些连接点会被切面所影响，通知定义了在切点处执行的逻辑，而连接点则表示程序执行过程中的某个特定点。</p>
+<p>Spring AOP的工作原理是通过动态代理的方式，在运行时将切面逻辑织入到目标对象的方法中，从而实现对横切关注点的处理。</p>
+<h1>AOP场景</h1>
+<p>场景设计<br>
+设计：编写一个计算器接口和实现类，提供加减乘除四则运算<br>
+需求：在加减乘除运算的时候需要记录操作日志（运算前参数、运算后结果）<br>
+实现：<br>
+<em>静态代理</em><br>
+<em>动态代理</em><br>
+<em><strong>AOP</strong></em></p>
+<h2>专业术语</h2>
+<p><a target="_blank" rel="noopener noreferrer" href=""><img alt="image-20241115220025476" style="max-width: 100%;"></a></p>
+<p><strong>切入点表达式</strong><br>
+<a target="_blank" rel="noopener noreferrer" href=""><img alt="image-20241115231646291" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href=""><img alt="image-20241115232431387" style="max-width: 100%;"></a></p>
+<h2>单切面执行顺序</h2>
+<div class="highlight highlight-source-java"><pre class="notranslate"><span class="pl-c1">@</span><span class="pl-c1">Component</span>
+<span class="pl-c1">@</span><span class="pl-c1">Aspect</span><span class="pl-c">//告诉spring这个组件是个切面</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">LogAspect</span> {
+    <span class="pl-c1">@</span><span class="pl-c1">Pointcut</span>(<span class="pl-s">"execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))"</span>)
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">pointCut</span>(){};
+
+    <span class="pl-c1">@</span><span class="pl-c1">Before</span>(<span class="pl-s">"execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))"</span>)
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">logStart</span>(){
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"【切面-日志】开始..."</span>);
+    }
+    
+    <span class="pl-c1">@</span><span class="pl-c1">After</span>(<span class="pl-s">"execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))"</span>)
+     <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">logEnd</span>(){
+         <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"【切面-日志】结束..."</span>);
+     }
+     
+     <span class="pl-c1">@</span><span class="pl-c1">AfterReturning</span>(<span class="pl-s1">value</span> = <span class="pl-s">"execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))"</span>,
+     <span class="pl-s1">returning</span> = <span class="pl-s">"result"</span>)
+     <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">logReturn</span>(<span class="pl-smi">JoinPoint</span> <span class="pl-s1">joinPoint</span>,<span class="pl-smi">Object</span> <span class="pl-s1">result</span>){
+         <span class="pl-smi">MethodSignature</span> <span class="pl-s1">signature</span> = (<span class="pl-smi">MethodSignature</span>) <span class="pl-s1">joinPoint</span>.<span class="pl-en">getSignature</span>();
+         <span class="pl-smi">String</span> <span class="pl-s1">name</span> = <span class="pl-s1">signature</span>.<span class="pl-en">getName</span>();
+         <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"【切面-日志】【"</span>+<span class="pl-s1">name</span>+<span class="pl-s">"】结果："</span>+<span class="pl-s1">result</span>);
+     }
+     
+     <span class="pl-c1">@</span><span class="pl-c1">AfterThrowing</span>(<span class="pl-s1">value</span> = <span class="pl-s">"pointCut()"</span>,
+     <span class="pl-s1">throwing</span> = <span class="pl-s">"e"</span>
+     )
+     <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">logException</span>(<span class="pl-smi">JoinPoint</span> <span class="pl-s1">joinPoint</span>,<span class="pl-smi">Exception</span> <span class="pl-s1">e</span>){
+         <span class="pl-smi">MethodSignature</span> <span class="pl-s1">signature</span> = (<span class="pl-smi">MethodSignature</span>) <span class="pl-s1">joinPoint</span>.<span class="pl-en">getSignature</span>();
+         <span class="pl-smi">String</span> <span class="pl-s1">name</span> = <span class="pl-s1">signature</span>.<span class="pl-en">getName</span>();
+         <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"【切面-日志】【"</span>+<span class="pl-s1">name</span>+<span class="pl-s">"】异常：错误信息：【+"</span>+<span class="pl-s1">e</span>.<span class="pl-en">getMessage</span>()+<span class="pl-s">"】"</span>);
+     }
+}</pre></div>
+<p><a target="_blank" rel="noopener noreferrer" href=""><img alt="image-20241115221506766" style="max-width: 100%;"></a></p>
+<h2>多切面执行顺序</h2>
+<p>•按照切面的优先级，优先级越高，越先执行，越是代理的最外层</p>
+<p>按首字母排序<br>
+自定义：加上<a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/order/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/order">@order</a>（） 数字越小，优先级最高</p>
+<div class="highlight highlight-source-java"><pre class="notranslate"><span class="pl-c1">@</span><span class="pl-c1">Component</span>
+<span class="pl-c1">@</span><span class="pl-c1">Aspect</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">AuthAspect</span> {
+    <span class="pl-c1">@</span><span class="pl-c1">Pointcut</span>(<span class="pl-s">"execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))"</span>)
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">pointCut</span>(){};
+    <span class="pl-c1">@</span><span class="pl-c1">Before</span>(<span class="pl-s">"pointCut()"</span>)
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">logStart</span>(){
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"【切面-认证】开始..."</span>);
+    }
+    <span class="pl-c1">@</span><span class="pl-c1">After</span>(<span class="pl-s">"pointCut()"</span>)
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">logEnd</span>(){
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"【切面-认证】结束..."</span>);
+    }
+}</pre></div>
+<p><a target="_blank" rel="noopener noreferrer" href=""><img alt="image-20241115222716726" style="max-width: 100%;"></a></p>
+<ul>
+<li>环绕通知固定写法如下</li>
+<li>object：返回值</li>
+<li>ProceedingJoinPoint：可以继续推进的切点</li>
+</ul>
+<div class="highlight highlight-source-java"><pre class="notranslate"><span class="pl-c1">@</span><span class="pl-c1">Component</span>
+<span class="pl-c1">@</span><span class="pl-c1">Aspect</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">AroundAspect</span> {
+    <span class="pl-c1">@</span><span class="pl-c1">Pointcut</span>(<span class="pl-s">"execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))"</span>)
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">pointcut</span>(){}
+
+    <span class="pl-c1">@</span><span class="pl-c1">Around</span>(<span class="pl-s">"pointcut()"</span>)
+    <span class="pl-k">public</span> <span class="pl-smi">Object</span> <span class="pl-en">aroundAdvice</span>(<span class="pl-smi">ProceedingJoinPoint</span> <span class="pl-s1">pjp</span>) <span class="pl-k">throws</span> <span class="pl-smi">Throwable</span> {
+        <span class="pl-smi">Object</span>[] <span class="pl-s1">args</span> = <span class="pl-s1">pjp</span>.<span class="pl-en">getArgs</span>();<span class="pl-c">//获取目标方法的参数</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"环绕-前置通知"</span>+ <span class="pl-smi">Arrays</span>.<span class="pl-en">toString</span>(<span class="pl-s1">args</span>));
+        <span class="pl-c">//接收传入参数的proceed，实现修改目标方法执行用的参数</span>
+        <span class="pl-smi">Object</span> <span class="pl-s1">proceed</span> = <span class="pl-c1">null</span>;<span class="pl-c">//执行目标方法；相当于反射method.invoke()</span>
+        <span class="pl-k">try</span> {
+            <span class="pl-s1">proceed</span> = <span class="pl-s1">pjp</span>. <span class="pl-en">proceed</span>(<span class="pl-s1">args</span>);
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"环绕-返回通知"</span>+<span class="pl-s1">proceed</span>);
+        } <span class="pl-k">catch</span> (<span class="pl-smi">Exception</span> <span class="pl-s1">e</span>) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"环绕-异常通知"</span>+<span class="pl-s1">e</span>.<span class="pl-en">getMessage</span>());
+            <span class="pl-k">throw</span> <span class="pl-s1">e</span>;   <span class="pl-c">//这里要抛出异常，不抛出事务不会回滚。</span>
+        }<span class="pl-k">finally</span> {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"环绕-后置通知"</span>);
+        }
+        <span class="pl-c">//修改返回值</span>
+        <span class="pl-k">return</span> <span class="pl-s1">proceed</span>;
+    }
+}</pre></div>
+<p><a target="_blank" rel="noopener noreferrer" href=""><img alt="image-20241115231109284" style="max-width: 100%;"></a></p> </div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
