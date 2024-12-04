@@ -1,367 +1,188 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>KNeegcyao - 没人看的博客</title><meta name="author" content="KNeegcyao"><meta name="copyright" content="KNeegcyao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="记录coding！">
+<meta property="og:type" content="website">
+<meta property="og:title" content="KNeegcyao">
 <meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="KNeegcyao">
+<meta property="og:description" content="记录coding！">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/test.jpeg">
 <meta property="article:author" content="KNeegcyao">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+<meta name="twitter:image" content="http://example.com/img/test.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
 
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
   
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
     
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
   
-  
-<meta name="generator" content="Hexo 7.3.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'https://fancyapps.com/fancybox/',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'KNeegcyao',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/79dc761210915a5728604c762b6fc0bd);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/test.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/15743329476579648);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/test.jpeg" alt="Logo"><span class="site-name">KNeegcyao</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">KNeegcyao</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/KNeegcyao" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:zhangchao2903@163.com.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=322815684" target="_blank" title="云音乐"><i class="fa-solid fa-music"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover"><a href="/2024/12/03/Spring/" title="Spring"><img class="post-bg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8LhCIilMy-1keBGUtLuPwXt4elI89DMIKhg&amp;s" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spring"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/12/03/Spring/" title="Spring">Spring</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-03T06:24:59.000Z" title="发表于 2024-12-03 14:24:59">2024-12-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/">后端框架</a></span></div><div class="content">Spring介绍Spring是一个IOC（DI）和AOP框架Sprng的优良特性  ·非侵入式：基于Spring开发的应用中的对象可以不依赖于Spring的API  ·依赖注入：DI是控制反转（IOC）最经典的实现  ·面向切面编程：AOP  ·组件化：Spring通过众多简单的组件配置组合成一个复杂应用  ·一站化：Spring提供了一系列框架，解决了应用开发中的众多问题 Spring模块划分  Spring-IOC容器组件和容器  ·组件：具有一定功能的对象。  ·容器：管理组件（创建，获取，保存，销毁）   可以将组件和容器的关系比喻成“房间”与“家具”的关系：   组件：可以看作是各种“家具”，比如桌子、椅子、灯、书架等。它们是构成界面或应用功能的基本元素，完成特定的功能任务，比如显示文本、输入数据等。  容器：则是“房间”或“空间”，用于装下各种家具。容器负责管理组件的布局、位置和相互之间的关系，同时也可能控制组件的生命周期和事件传递。  常见的容器：Servlet 容器（如 Tomcat、Jetty）：用于管理和运行 Java Web 应用，处理 HTTP...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/03/hello-world/" title="Hello World">Hello World</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-03T06:08:58.554Z" title="发表于 2024-12-03 14:08:58">2024-12-03</time></span></div><div class="content">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new &quot;My New Post&quot;  More info: Writing Run server1$ hexo server  More info: Server Generate static files1$ hexo generate  More info: Generating Deploy to remote sites1$ hexo deploy  More info: Deployment </div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/test.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">KNeegcyao</div><div class="author-info-description">记录coding！</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/KNeegcyao"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/KNeegcyao" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:zhangchao2903@163.com.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=322815684" target="_blank" title="云音乐"><i class="fa-solid fa-music"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/Spring/" title="Spring"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8LhCIilMy-1keBGUtLuPwXt4elI89DMIKhg&amp;s" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spring"/></a><div class="content"><a class="title" href="/2024/12/03/Spring/" title="Spring">Spring</a><time datetime="2024-12-03T06:24:59.000Z" title="发表于 2024-12-03 14:24:59">2024-12-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/03/hello-world/" title="Hello World">Hello World</a><time datetime="2024-12-03T06:08:58.554Z" title="发表于 2024-12-03 14:08:58">2024-12-03</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">后端框架</span><span class="card-category-list-count">1</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" style="font-size: 1.1em; color: #999">基础知识</a> <a href="/tags/Java/" style="font-size: 1.1em; color: #999">Java</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
       
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main">
+    <ul class="card-archive-list">
   
-    <article id="post-Spring" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/12/03/Spring/" class="article-date">
-  <time class="dt-published" datetime="2024-12-03T06:24:59.000Z" itemprop="datePublished">2024-12-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/12/03/Spring/">Spring</a>
-    </h1>
-  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/12/">
+          <span class="card-archive-list-date">十二月 2024</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">2</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">5k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-12-04T07:18:53.920Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/15743329476579648);"><div id="footer-wrap"><div class="copyright">&copy;2024 By KNeegcyao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="Spring介绍"><a href="#Spring介绍" class="headerlink" title="Spring介绍"></a>Spring介绍</h1><h2 id="Spring是一个IOC（DI）和AOP框架"><a href="#Spring是一个IOC（DI）和AOP框架" class="headerlink" title="Spring是一个IOC（DI）和AOP框架"></a>Spring是一个IOC（DI）和AOP框架</h2><h3 id="Sprng的优良特性"><a href="#Sprng的优良特性" class="headerlink" title="Sprng的优良特性"></a>Sprng的优良特性</h3><p>  ·非侵入式：基于Spring开发的应用中的对象可以不依赖于Spring的API<br>  ·依赖注入：DI是控制反转（IOC）最经典的实现<br>  ·面向切面编程：AOP<br>  ·组件化：Spring通过众多简单的组件配置组合成一个复杂应用<br>  ·一站化：Spring提供了一系列框架，解决了应用开发中的众多问题</p>
-<h2 id="Spring模块划分"><a href="#Spring模块划分" class="headerlink" title="Spring模块划分"></a>Spring模块划分</h2><p><img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112170617466.png" alt="image-20241112170617466"></p>
-<p><img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112170718867.png" alt="image-20241112170718867"></p>
-<h1 id="Spring-IOC容器"><a href="#Spring-IOC容器" class="headerlink" title="Spring-IOC容器"></a>Spring-IOC容器</h1><h2 id="组件和容器"><a href="#组件和容器" class="headerlink" title="组件和容器"></a>组件和容器</h2><p>  ·组件：具有一定功能的对象。<br>  ·容器：管理组件（创建，获取，保存，销毁）</p>
-<p>  可以将组件和容器的关系比喻成<strong>“房间”与“家具”</strong>的关系：</p>
-<p>  组件：可以看作是各种“家具”，比如桌子、椅子、灯、书架等。它们是构成界面或应用功能的基本元素，完成特定的功能任务，比如显示文本、输入数据等。<br>  容器：则是“房间”或“空间”，用于装下各种家具。容器负责管理组件的布局、位置和相互之间的关系，同时也可能控制组件的生命周期和事件传递。</p>
-<p> 常见的容器：<strong>Servlet 容器</strong>（如 Tomcat、Jetty）：用于管理和运行 Java Web 应用，处理 HTTP 请求和响应。<br>                      <strong>Docker 容器</strong>：用于封装应用及其依赖的环境，确保应用能够在不同平台上运行一致。</p>
-<p><img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112171601414.png" alt="image-20241112171601414"></p>
-<h2 id="IOC和DI"><a href="#IOC和DI" class="headerlink" title="IOC和DI"></a>IOC和DI</h2><h3 id="IOC：Inversion-of-Control（控制反转）"><a href="#IOC：Inversion-of-Control（控制反转）" class="headerlink" title="IOC：Inversion of Control（控制反转）"></a><strong>IOC：Inversion of Control（控制反转）</strong></h3><p><strong>控制</strong>：资源的控制权（资源的创建、获取、销毁等）<br><strong>反转</strong>：传统上，对象的创建和依赖的管理是由对象本身控制的，而在控制反转的设计中，这种控制权被“反转”到了外部容器或框架中</p>
-<h3 id="DI：Dependency-Injection（依赖注入）"><a href="#DI：Dependency-Injection（依赖注入）" class="headerlink" title="DI：Dependency Injection（依赖注入）"></a><strong>DI：Dependency Injection（依赖注入）</strong></h3><p><strong>依赖</strong>：组件的依赖关系，如 NewsController 依赖 NewsServices<br><strong>注入</strong>：通过setter方法、构造器、等方式自动的注入（赋值）</p>
-<p><strong>简单示例</strong><br>假设我们有一个 UserService 类，它依赖于 UserRepository：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//无控制反转</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Userservice</span>&#123;</span><br><span class="line">   <span class="keyword">private</span> UserReposity userRepository;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="title function_">UserService</span><span class="params">()</span>&#123;</span><br><span class="line">       <span class="built_in">this</span>.userRepository=<span class="keyword">new</span> <span class="title class_">UserRepository</span>();<span class="comment">//自行创建依赖</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">````</span><br><span class="line">在 IoC 的情况下，UserService 不再自行创建 UserRepository，而是通过依赖注入的方式，由外部容器将 UserRepository 注入到 UserService 中：</span><br><span class="line">```java</span><br><span class="line"><span class="comment">//使用控制反转</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Userservice</span>&#123;</span><br><span class="line"> <span class="keyword">private</span> UserRepository userRepository;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 通过构造函数注入</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserService</span><span class="params">(UserRepository userRepository)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userRepository = userRepository;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserRepository userRepository;  <span class="comment">// 直接在属性上注入</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> UserRepository userRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUserRepository</span><span class="params">(UserRepository userRepository)</span> &#123;  <span class="comment">// 通过setter方法注入</span></span><br><span class="line">        <span class="built_in">this</span>.userRepository = userRepository;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
 
-<h2 id="注册组建的各种方式"><a href="#注册组建的各种方式" class="headerlink" title="注册组建的各种方式"></a>注册组建的各种方式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      <span class="comment">//跑起spring应用 返回的是一个ioc容器</span></span><br><span class="line">      <span class="type">ConfigurableApplicationContext</span> <span class="variable">ioc</span> <span class="operator">=</span> SpringApplication.run(DemoApplication.class, args);</span><br><span class="line">      System.out.println(<span class="string">&quot;ioc=&quot;</span>+ioc);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-通过-Bean"><a href="#1-通过-Bean" class="headerlink" title="1.通过@Bean"></a><strong>1.通过@Bean</strong></h3><p>多应用在方法上<br>Spring 4后推荐我们使用Java Config的方式来注册组件。**@Configuration**是 Spring 框架中的一个注解，用于标记一个类为 配置类，相当于 Spring XML 配置文件的替代方式。被 <strong>@Configuration</strong> 标记的类可以用来定义 Bean，并将它们注册到 Spring 的 IoC 容器中。<br>告诉 Spring 该类包含了 一个或多个 @Bean 方法，这些方法会生成所需的 Bean，并注册到容器中以便在整个应用中共享</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonConfig</span>&#123;</span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="keyword">public</span> Person <span class="title function_">person</span><span class="params">()</span>&#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;zhang&quot;</span>,<span class="number">20</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-通过-Component"><a href="#2-通过-Component" class="headerlink" title="2.通过@Component"></a><strong>2.通过@Component</strong></h3><p>多应用在类上<br>MVC分层多用@Controller，@Service，@Component</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//@Service源代码</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span>   <span class="comment">//一样</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Service &#123;</span><br><span class="line">    <span class="meta">@AliasFor(</span></span><br><span class="line"><span class="meta">        annotation = Component.class</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">Userservice</span>&#123;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-使用-ComponentScan扫描"><a href="#3-使用-ComponentScan扫描" class="headerlink" title="3.使用@ComponentScan扫描"></a><strong>3.使用@ComponentScan扫描</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(value = &#123;&quot;com.example.springdemo.controller&quot;,&quot;com.example.springdemo.entity&quot;,&quot;com.example.springdemo.dao&quot;,&quot;com.example.springdemo.service&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfig</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    @Bean(&quot;myUser&quot;)</span></span><br><span class="line"><span class="comment">//    public User user() &#123;</span></span><br><span class="line"><span class="comment">//        return new User(&quot;cc&quot;, 18);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>excludeFilters来排除一些组件的扫描：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(value = &#123;&quot;com.example.springdemo.controller&quot;,</span></span><br><span class="line"><span class="meta">        &quot;com.example.springdemo.entity&quot;,</span></span><br><span class="line"><span class="meta">        &quot;com.example.springdemo.dao&quot;,</span></span><br><span class="line"><span class="meta">        &quot;com.example.springdemo.service&quot;&#125;,</span></span><br><span class="line"><span class="meta">        excludeFilters = &#123;</span></span><br><span class="line"><span class="meta">                @ComponentScan.Filter(type = FilterType.ANNOTATION,</span></span><br><span class="line"><span class="meta">                        classes = &#123;RestController.class&#125;),</span></span><br><span class="line"><span class="meta">                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = User.class)</span></span><br><span class="line"><span class="meta">        &#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfig</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    @Bean(&quot;myUser&quot;)</span></span><br><span class="line"><span class="comment">//    public User user() &#123;</span></span><br><span class="line"><span class="comment">//        return new User(&quot;cc&quot;, 18);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>includeFilters的作用和excludeFilters相反，其指定的是哪些组件需要被扫描：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ComponentScan(value = &#123;&quot;com.example.springdemo.controller&quot;,</span></span><br><span class="line"><span class="meta">        &quot;com.example.springdemo.entity&quot;,</span></span><br><span class="line"><span class="meta">        &quot;com.example.springdemo.dao&quot;,</span></span><br><span class="line"><span class="meta">        &quot;com.example.springdemo.service&quot;&#125;,</span></span><br><span class="line"><span class="meta">        includeFilters = &#123;</span></span><br><span class="line"><span class="meta">                @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Service.class)</span></span><br><span class="line"><span class="meta">        &#125;, useDefaultFilters = false)</span></span><br></pre></td></tr></table></figure>
-
-<p>上面配置了只将Service纳入IOC容器，并且需要用useDefaultFilters &#x3D; false来关闭Spring默认的扫描策略才能让我们的配置生效（Spring Boot入口类的@SpringBootApplication注解包含了一些默认的扫描策略）。</p>
-<h3 id="4-Import导入"><a href="#4-Import导入" class="headerlink" title="4.@Import导入"></a><strong>4.@Import导入</strong></h3><p>可以使用@Import来快速地往IOC容器中添加组件。<br>创建一个新的类Hello：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Hello</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后在配置类中导入这个组件：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import(&#123;Hello.class&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfig</span> &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-组件作用域-Scope"><a href="#5-组件作用域-Scope" class="headerlink" title="5.组件作用域@Scope"></a><strong>5.组件作用域@Scope</strong></h3><p>默认情况下，在Spring的IOC容器中每个组件都是单例的，即无论在任何地方注入多少次，这些对象都是同一个<br>在Spring中我们可以使用@Scope注解来改变组件的作用域：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE, ElementType.METHOD&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Scope &#123;</span><br><span class="line">    <span class="meta">@AliasFor(&quot;scopeName&quot;)</span></span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AliasFor(&quot;value&quot;)</span></span><br><span class="line">    String <span class="title function_">scopeName</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    ScopedProxyMode <span class="title function_">proxyMode</span><span class="params">()</span> <span class="keyword">default</span> ScopedProxyMode.DEFAULT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>有如下几个选项：</p>
-<p><strong>singleton</strong>：单实例（默认）,在Spring IOC容器启动的时候会调用方法创建对象然后纳入到IOC容器中，以后每次获取都是直接从IOC容器中获取（map.get()）；容器启动的时候，会创建单实例组件的对象，容器启动完成之前就会创建<br><strong>prototype</strong>：多实例，IOC容器启动的时候并不会去创建对象，而是在每次获取的时候才会去调用方法创建对象；容器启动的时候，不会创建非单实例组件的对象，什么时候获取，什么时候创建<br><strong>request</strong>：一个请求对应一个实例；<br><strong>session</strong>：同一个session对应一个实例。<br>我们可以使用多实例测试一下，在配置文件中给User添加Scope注解。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Bean(&quot;myUser&quot;)</span></span><br><span class="line">        <span class="meta">@Scope(value = &quot;prototype&quot;)</span></span><br><span class="line">        <span class="keyword">public</span> User <span class="title function_">user</span><span class="params">()</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;cc&quot;</span>, <span class="number">18</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="6-懒加载-Lazy"><a href="#6-懒加载-Lazy" class="headerlink" title="6.懒加载@Lazy"></a><strong>6.懒加载@Lazy</strong></h3><p>容器启动之前不会创建懒加载组件的对象<br>什么时候获取，什么时候创建<br>懒加载是针对单例模式而言的，正如前面所说，IOC容器中的组件默认是单例的，容器启动的时候会调用方法创建对象然后纳入到IOC容器中。<br>@Configuration<br>public class WebConfig {</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Bean(&quot;myUser&quot;)</span></span><br><span class="line"><span class="comment">//        @Scope(value = &quot;prototype&quot;)</span></span><br><span class="line">    <span class="meta">@Lazy</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">user</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;往IOC容器中注册user bean&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;cc&quot;</span>, <span class="number">18</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="注入组件的各种方式"><a href="#注入组件的各种方式" class="headerlink" title="注入组件的各种方式"></a>注入组件的各种方式</h2><h3 id="1-构造器注入"><a href="#1-构造器注入" class="headerlink" title="1. 构造器注入"></a><strong>1. 构造器注入</strong></h3><p>构造器注入是最常见和推荐的依赖注入方式之一。通过构造器注入，我们可以在创建一个Bean实例时，将其所需的依赖项作为构造函数的参数进行传递。Spring容器会负责解析依赖关系并创建Bean的实例。示例代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ExampleService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Dependency dependency;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ExampleService</span><span class="params">(Dependency dependency)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.dependency = dependency;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2-Setter方法注入"><a href="#2-Setter方法注入" class="headerlink" title="2. Setter方法注入"></a><strong>2. Setter方法注入</strong></h3><p>Setter方法注入是另一种常用的依赖注入方式。通过Setter方法注入，我们在Bean的类中定义对应的Setter方法，Spring容器会通过调用这些Setter方法来设置依赖项。示例代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ExampleService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Dependency dependency;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setDependency</span><span class="params">(Dependency dependency)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.dependency = dependency;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-接口注入"><a href="#3-接口注入" class="headerlink" title="3. 接口注入"></a><strong>3. 接口注入</strong></h3><p>除了构造器注入和Setter方法注入，Spring还支持通过接口注入来实现依赖注入。这种方式要求目标Bean实现特定的接口，并通过接口方法来设置依赖项。示例代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">DependencyInjection</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">setDependency</span><span class="params">(Dependency dependency)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ExampleService</span> <span class="keyword">implements</span> <span class="title class_">DependencyInjection</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Dependency dependency;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setDependency</span><span class="params">(Dependency dependency)</span> &#123; </span><br><span class="line">        <span class="built_in">this</span>.dependency = dependency;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-注解注入"><a href="#4-注解注入" class="headerlink" title="4.注解注入"></a><strong>4.注解注入</strong></h3><p>Spring框架提供了多个注解用于依赖注入，简化了配置和代码的编写。常用的注解包括：</p>
-<p><strong>@Autowired</strong>：自动装配依赖项。<br><strong>@Qualifier</strong>：在存在多个候选Bean时，指定要注入的具体Bean。<br><strong>@Resource</strong>：指定要注入的Bean，并可以通过名称或类型进行查找。<br><strong>@Value</strong>：注入简单的值，如基本类型、字符串等。<br><strong>@Inject</strong>：与@Autowired类似，用于依赖注入。<br>示例代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ExampleService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier(&quot;dependency&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Dependency dependency;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><em><strong>@Autowired 和 @Resource 有什么区别?</strong></em><br><strong>1.来源不同</strong><br>@Autowired 和 @Resource 来自不同的“父类”，其中 @Autowired 是 Spring 定义的注解，而 @Resource 是 Java 定义的注解，它来自于 JSR-250（Java 250 规范提案）<br><strong>2.依赖查找顺序不同</strong><br>依赖注入的功能，是通过先在 Spring IoC 容器中查找对象，再将对象注入引入到当前类中。而查找有分为两种实现：按名称（byName）查找或按类型（byType）查找，其中 @Autowired 和 @Resource 都是既使用了名称查找又使用了类型查找，但二者进行查找的顺序却截然相反。<br>  2.1 @Autowired 查找顺序<br>@Autowired 是先根据类型（byType）查找，如果存在多个 Bean 再根据名称（byName）进行查找，它的具体查找流程如下：</p>
-<p><img src="https://ucc.alicdn.com/464o66bnbw5zc/developer-article1003903/20241026/ee57439399df487b9eb40a0f50387f32.png" alt="image.png"></p>
-<p>  2.2 @Resource 查找顺序<br>@Resource 是先根据名称查找，如果（根据名称）查找不到，再根据类型进行查找，它的具体流程如下图所示:</p>
-<p><img src="https://ucc.alicdn.com/464o66bnbw5zc/developer-article1003903/20241026/594e0365fda84e37867ebfb98ec738e8.png" alt="image.png"><br>  2.3 查找顺序小结<br>由上面的分析可以得出：<br>@Autowired 先根据类型（byType）查找，如果存在多个（Bean）再根据名称（byName）进行查找；<br>@Resource 先根据名称（byName）查找，如果（根据名称）查找不到，再根据类型（byType)进行查找。<br><strong>3.支持的参数不同</strong><br>@Autowired 和 @Resource 在使用时都可以设置参数，比如给 @Resource 注解设置 name 和 type 参数，实现代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource(name = &quot;userinfo&quot;, type = UserInfo.class)</span></span><br><span class="line"><span class="keyword">private</span> UserInfo user;</span><br></pre></td></tr></table></figure>
-<p>但二者支持的参数以及参数的个数完全不同，其中 @Autowired 只支持设置一个 required 的参数，而 @Resource 支持 7 个参数<img src="https://ucc.alicdn.com/464o66bnbw5zc/developer-article1003903/20241026/b021209425294ad9845a765b0f16fa9d.png" alt="image.png"></p>
-<p><img src="https://ucc.alicdn.com/464o66bnbw5zc/developer-article1003903/20241026/272dd61a8fa949fa95c6826f2558d3fe.png" alt="image.png"><br><strong>4.依赖注入的支持不同</strong><br>其中， @Autowired 支持属性注入、构造方法注入和 Setter 注入，而 @Resource 只支持属性注入和 Setter 注入<br><strong>5.编译器提示不同</strong><br>当使用 IDEA 专业版在编写依赖注入的代码时，如果注入的是 Mapper 对象，那么使用 @Autowired 编译器会提示报错信息</p>
-<h2 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="@Bean的生命周期"></a>@Bean的生命周期</h2><p><img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241112212824396.png" alt="image-20241112212824396"></p>
-<hr>
-<h1 id="Spring-AOP"><a href="#Spring-AOP" class="headerlink" title="Spring-AOP"></a>Spring-AOP</h1><h2 id="什么是AOP"><a href="#什么是AOP" class="headerlink" title="什么是AOP"></a>什么是AOP</h2><p>Spring AOP（Aspect-Oriented Programming）是Spring框架提供的一种面向切面编程的技术。它通过将横切关注点（例如日志记录、事务管理、安全性检查等）从主业务逻辑代码中分离出来，以模块化的方式实现对这些关注点的管理和重用。</p>
-<p>在Spring AOP中，切面（Aspect）是一个模块化的关注点，它可以跨越多个对象，例如日志记录、事务管理等。切面通过定义切点（Pointcut）和增强（Advice）来介入目标对象的方法执行过程。</p>
-<p>切点是一个表达式，用于匹配目标对象的一组方法，在这些方法执行时切面会被触发。增强则定义了切面在目标对象方法执行前、执行后或抛出异常时所要执行的逻辑。</p>
-<p>Spring AOP提供了以下几种类型的增强：</p>
-<p>前置增强（Before Advice）：在目标方法执行之前执行的逻辑。<br>后置增强（After Advice）：在目标方法执行之后执行的逻辑，不管目标方法是否抛出异常。<br>返回增强（After Returning Advice）：在目标方法正常返回时执行的逻辑。<br>异常增强（After Throwing Advice）：在目标方法抛出异常时执行的逻辑。<br>环绕增强（Around Advice）：在目标方法执行前后都可以执行的逻辑，它可以完全控制目标方法的执行。<br>Spring AOP通过使用动态代理技术，在目标对象方法执行时将切面的逻辑织入到目标对象的方法中。这样，我们可以在不修改原始业务代码的情况下，实现横切关注点的统一处理。</p>
-<p>总而言之，Spring AOP是一种通过切面将横切关注点模块化的技术，它提供了一种简洁的方式来管理和重用跨越多个对象的关注点逻辑。</p>
-<h2 id="为什么要用AOP"><a href="#为什么要用AOP" class="headerlink" title="为什么要用AOP"></a>为什么要用AOP</h2><p><strong>模块化</strong>：Spring AOP将横切关注点从主业务逻辑代码中分离出来，以模块化的方式实现对这些关注点的管理和重用。这样，我们可以更容易地维护代码，并且可以将同一个关注点的逻辑应用到多个方法或类中。</p>
-<p><strong>非侵入式</strong>：使用Spring AOP时，我们不需要修改原始业务逻辑代码，只需要在切点和增强中定义我们所需要的逻辑即可。这样，我们可以保持原始代码的简洁性和可读性。</p>
-<p><strong>可重用性</strong>：我们可以将同一个切面应用于多个目标对象进行横切处理。这样，我们可以提高代码的重用性，并且可以更加方便地维护和更新切面逻辑。</p>
-<p><strong>松耦合</strong>：AOP可以减少各个业务模块之间的耦合度，这是因为我们可以将某些通用的逻辑作为切面来实现，而不是直接在各个业务模块中实现。这样可以使得各个业务模块之间更加独立，从而提高代码的可维护性。</p>
-<p>在Spring AOP中，我们可以定义切面（Aspect），切面由切点（Pointcut）、通知（Advice）和连接点（Joinpoint）组成。切点定义了哪些连接点会被切面所影响，通知定义了在切点处执行的逻辑，而连接点则表示程序执行过程中的某个特定点。</p>
-<p>Spring AOP的工作原理是通过动态代理的方式，在运行时将切面逻辑织入到目标对象的方法中，从而实现对横切关注点的处理。</p>
-<h1 id="AOP场景"><a href="#AOP场景" class="headerlink" title="AOP场景"></a>AOP场景</h1><p>场景设计<br>设计：编写一个计算器接口和实现类，提供加减乘除四则运算<br>需求：在加减乘除运算的时候需要记录操作日志（运算前参数、运算后结果）<br>实现：<br><em>静态代理</em><br><em>动态代理</em><br><em><strong>AOP</strong></em></p>
-<h2 id="专业术语"><a href="#专业术语" class="headerlink" title="专业术语"></a>专业术语</h2><p><img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115220025476.png" alt="image-20241115220025476"></p>
-<p><strong>切入点表达式</strong><br><img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115231646291.png" alt="image-20241115231646291"></p>
-<p><img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115232431387.png" alt="image-20241115232431387"></p>
-<h2 id="单切面执行顺序"><a href="#单切面执行顺序" class="headerlink" title="单切面执行顺序"></a>单切面执行顺序</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Aspect</span><span class="comment">//告诉spring这个组件是个切面</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogAspect</span> &#123;</span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pointCut</span><span class="params">()</span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before(&quot;execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logStart</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;【切面-日志】开始...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@After(&quot;execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))&quot;)</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logEnd</span><span class="params">()</span>&#123;</span><br><span class="line">         System.out.println(<span class="string">&quot;【切面-日志】结束...&quot;</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     <span class="meta">@AfterReturning(value = &quot;execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))&quot;,</span></span><br><span class="line"><span class="meta">     returning = &quot;result&quot;)</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logReturn</span><span class="params">(JoinPoint joinPoint,Object result)</span>&#123;</span><br><span class="line">         <span class="type">MethodSignature</span> <span class="variable">signature</span> <span class="operator">=</span> (MethodSignature) joinPoint.getSignature();</span><br><span class="line">         <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> signature.getName();</span><br><span class="line">         System.out.println(<span class="string">&quot;【切面-日志】【&quot;</span>+name+<span class="string">&quot;】结果：&quot;</span>+result);</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     <span class="meta">@AfterThrowing(value = &quot;pointCut()&quot;,</span></span><br><span class="line"><span class="meta">     throwing = &quot;e&quot;</span></span><br><span class="line"><span class="meta">     )</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logException</span><span class="params">(JoinPoint joinPoint,Exception e)</span>&#123;</span><br><span class="line">         <span class="type">MethodSignature</span> <span class="variable">signature</span> <span class="operator">=</span> (MethodSignature) joinPoint.getSignature();</span><br><span class="line">         <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> signature.getName();</span><br><span class="line">         System.out.println(<span class="string">&quot;【切面-日志】【&quot;</span>+name+<span class="string">&quot;】异常：错误信息：【+&quot;</span>+e.getMessage()+<span class="string">&quot;】&quot;</span>);</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115221506766.png" alt="image-20241115221506766" style="zoom:67%;" />
-
-
-
-
-
-<h2 id="多切面执行顺序"><a href="#多切面执行顺序" class="headerlink" title="多切面执行顺序"></a>多切面执行顺序</h2><p>•按照切面的优先级，优先级越高，越先执行，越是代理的最外层</p>
-<p>按首字母排序<br>自定义：加上@Order（） 数字越小，优先级最高</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuthAspect</span> &#123;</span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pointCut</span><span class="params">()</span>&#123;&#125;;</span><br><span class="line">    <span class="meta">@Before(&quot;pointCut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logStart</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;【切面-认证】开始...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@After(&quot;pointCut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logEnd</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;【切面-认证】结束...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115222716726.png" alt="image-20241115222716726" style="zoom: 50%;" />
-
-
-
-<ul>
-<li>环绕通知固定写法如下</li>
-<li>object：返回值</li>
-<li>ProceedingJoinPoint：可以继续推进的切点<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AroundAspect</span> &#123;</span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(int com.kneeg.demoaop.calculator.MathCalculator.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pointcut</span><span class="params">()</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Around(&quot;pointcut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">aroundAdvice</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        Object[] args = pjp.getArgs();<span class="comment">//获取目标方法的参数</span></span><br><span class="line">        System.out.println(<span class="string">&quot;环绕-前置通知&quot;</span>+ Arrays.toString(args));</span><br><span class="line">        <span class="comment">//接收传入参数的proceed，实现修改目标方法执行用的参数</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">proceed</span> <span class="operator">=</span> <span class="literal">null</span>;<span class="comment">//执行目标方法；相当于反射method.invoke()</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            proceed = pjp. proceed(args);</span><br><span class="line">            System.out.println(<span class="string">&quot;环绕-返回通知&quot;</span>+proceed);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;环绕-异常通知&quot;</span>+e.getMessage());</span><br><span class="line">            <span class="keyword">throw</span> e;   <span class="comment">//这里要抛出异常，不抛出事务不会回滚。</span></span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;环绕-后置通知&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//修改返回值</span></span><br><span class="line">        <span class="keyword">return</span> proceed;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241115231109284.png" alt="image-20241115231109284" style="zoom:67%;" /> 
-
-<h2 id="Spring中事务管理"><a href="#Spring中事务管理" class="headerlink" title="Spring中事务管理"></a>Spring中事务管理</h2><p>在 Spring 中，事务管理是基于代理模式的，而代理的生效依赖于对代理对象的调用。当你在 同一个类 中通过 <strong><code>非事务方法 A 调用 事务方法 B</code></strong> 时，事务可能会失效。<br>原因是 Spring 的事务管理是通过 <strong>AOP</strong> 代理的，而 内部方法调用（即同一类中的方法调用）不会经过 AOP 代理，从而导致事务控制不生效。</p>
-<h3 id="为什么事务失效？"><a href="#为什么事务失效？" class="headerlink" title="为什么事务失效？"></a>为什么事务失效？</h3><p>在 Spring 中，事务管理通常是通过<code>@Transactional</code> 注解和 Spring AOP 实现的。Spring 使用代理模式来控制事务，这意味着事务的管理实际上是由代理对象控制的，而不是直接在方法中执行的。当你调用类中的一个带有 <code>@Transactional</code> 注解的方法时，Spring 会创建一个代理对象，并通过代理对象来管理事务的开始、提交和回滚。<br>但是，如果你在 同一个类 中通过直接调用非事务方法来调用带有事务注解的方法，Spring 会认为这是一个普通的本地方法调用，而不会触发代理。因为事务管理是依赖于代理的，所以事务不会生效。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodWithTransaction</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 这个方法会在代理的上下文中被调用，事务会生效</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Executing method with transaction...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodWithoutTransaction</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 直接调用会导致事务失效</span></span><br><span class="line">        methodWithTransaction(); <span class="comment">// 事务不会生效</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p><em><strong>1.使用AppContext.currentProxy()</strong></em><br>为了解决 同类方法调用事务失效 的问题，Spring 提供了 AopContext.currentProxy() 来确保通过代理对象进行方法调用。通过 AopContext.currentProxy() 获取到当前的代理对象，并通过代理对象来调用事务方法，可以确保事务管理生效。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyServiceImpl</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodWithTransaction</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 这个方法有事务控制</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Executing method with transaction...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodWithoutTransaction</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 使用 AopContext.currentProxy() 来调用带有事务注解的方法</span></span><br><span class="line">        <span class="type">MyService</span> <span class="variable">proxy</span> <span class="operator">=</span> (MyService) AopContext.currentProxy();</span><br><span class="line">        proxy.methodWithTransaction();  <span class="comment">// 通过代理对象调用事务方法，事务会生效</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意：启动类要加上<code>@EnableAspectJAutoProxy</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableAspectJAutoProxy(exposeProxy=true)</span><span class="comment">//暴露代理对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line">    <span class="comment">// AOP 配置</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><em><strong>2.直接注入实现类</strong></em></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span>&#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">testUserFun</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span>&#123;</span><br><span class="line">     <span class="meta">@Autowired</span></span><br><span class="line">     <span class="keyword">private</span> UserService proxy; <span class="comment">//注入的是代理对象</span></span><br><span class="line">     </span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">     <span class="meta">@Transactional</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testUserFun</span><span class="params">()</span>&#123;</span><br><span class="line">     </span><br><span class="line">     &#125;</span><br><span class="line">     proxy.testUserFun();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>为什么proxy是代理对象？</strong><br>Spring 容器会检测到 UserServiceImpl 中存在<code> @Transactional</code> 注解，生成一个 UserService 的代理对象（如果目标类实现了接口,Spring 会使用 JDK 动态代理）。<br>当 <code>@Autowired</code> 注入时，Spring 将代理对象注入到 proxy 中，而不是原始的实现类实例。<br>必须通过接口注入代理对象，而不是直接注入实现类。如果你直接写 <code>@Autowired private UserServiceImpl proxy;</code>Spring 注入的会是原始类，而非代理类，事务不会生效。</p>
-<img src="C:\Users\29039\AppData\Roaming\Typora\typora-user-images\image-20241202232716394.png" alt="image-20241202232716394" style="zoom:50%;" />
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2024/12/03/Spring/" data-id="cm482tllx0000ngdvhi19f2kt" data-title="Spring" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/12/03/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2024-12-03T06:08:58.554Z" itemprop="datePublished">2024-12-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/12/03/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2024/12/03/hello-world/" data-id="cm4827mi20000skdveiigd6a4" data-title="Hello World" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">十二月 2024</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2024/12/03/Spring/">Spring</a>
-          </li>
-        
-          <li>
-            <a href="/2024/12/03/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2024 KNeegcyao<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
