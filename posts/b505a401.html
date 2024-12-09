@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>网络编程懒人入门（十一）:一文读懂什么是IPv6 | KNeegcyao</title><meta name="author" content="KNeegcyao"><meta name="copyright" content="KNeegcyao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="引言现在IPv6的技术应用已经越来越普及了，很多应用都开始支持IPv6。  ▲ 去年开始，支付宝的官网上就已出现“支持IPv6”标识 对于即时通讯技术（尤其是IM应用）的开发者来说，新产品上架苹果的App Store因IPv6问题被拒的情况，很常见。每次也都能根据网上的资料一一解决，并顺利通过审核。 然而几次下来，到底什么是IPv6，还是有点云里雾里。 那么，IP协议在TCP&#x2F;IP体系中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程懒人入门（十一）:一文读懂什么是IPv6">
+<meta property="og:url" content="http://example.com/posts/b505a401.html">
+<meta property="og:site_name" content="KNeegcyao">
+<meta property="og:description" content="引言现在IPv6的技术应用已经越来越普及了，很多应用都开始支持IPv6。  ▲ 去年开始，支付宝的官网上就已出现“支持IPv6”标识 对于即时通讯技术（尤其是IM应用）的开发者来说，新产品上架苹果的App Store因IPv6问题被拒的情况，很常见。每次也都能根据网上的资料一一解决，并顺利通过审核。 然而几次下来，到底什么是IPv6，还是有点云里雾里。 那么，IP协议在TCP&#x2F;IP体系中">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg">
+<meta property="article:published_time" content="2024-12-09T07:24:59.000Z">
+<meta property="article:modified_time" content="2024-12-09T06:55:51.024Z">
+<meta property="article:author" content="KNeegcyao">
+<meta property="article:tag" content="基础知识">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/posts/b505a401.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'https://fancyapps.com/fancybox/',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络编程懒人入门（十一）:一文读懂什么是IPv6',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/15189043253972288);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/dbec14fc4bb3795ba2556e8a82eaee0f.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/f351ca6264cb84d5053926824a04634af351ca6264cb84d5053926824a04634a);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/dbec14fc4bb3795ba2556e8a82eaee0f.jpg" alt="Logo"><span class="site-name">KNeegcyao</span></a><a class="nav-page-title" href="/"><span class="site-name">网络编程懒人入门（十一）:一文读懂什么是IPv6</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">网络编程懒人入门（十一）:一文读懂什么是IPv6</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-09T06:55:51.024Z" title="更新于 2024-12-09 14:55:51">2024-12-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>现在IPv6的技术应用已经越来越普及了，很多应用都开始支持IPv6。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/132420kj8j25j51jly55by.jpg" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_a.jpg"></p>
+<p>▲ 去年开始，支付宝的官网上就已出现“支持IPv6”标识</p>
+<p>对于即时通讯技术（尤其是IM应用）的开发者来说，新产品上架苹果的App Store因IPv6问题被拒的情况，很常见。每次也都能根据网上的资料一一解决，并顺利通过审核。</p>
+<p>然而几次下来，到底什么是IPv6，还是有点云里雾里。</p>
+<p>那么，IP协议在TCP&#x2F;IP体系中到底有多重要？看看下图便知（原因清晰版：<a target="_blank" rel="noopener" href="http://www.52im.net/thread-180-1-1.html">从此处进入下载</a>）。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/134046fcromaau5nzh36ni.png" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_b.png"></p>
+<p>▲ 红圈处就是IP协议，它几乎是整个TCP&#x2F;IP协议簇的支撑（图引用自《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-180-1-1.html">计算机网络通讯协议关系图</a>》）</p>
+<p>总之，IP协议在TCP&#x2F;IP体系中，是非常重要的一环（可以认为，没它，也就没有了互联网），作为IPv4的下一代协议，了解IPv6非常有必要。而作为即时通讯开发者来说，了解IPv6就显的尤为迫切，说不定某天你的IM就会因为IPv6问题而导致无法通信的局面出现。</p>
+<p>本文将用浅显易懂的文字，带你了解到底什么是IPv6。</p>
+<p><strong>推荐阅读1：</strong>关于IPv6的更详细技术文章请见《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1605-1-1.html">IPv6技术详解：基本概念、应用现状、技术实践（上篇）</a>》、《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1607-1-1.html">IPv6技术详解：基本概念、应用现状、技术实践（下篇）</a>》。另一篇有关Java支持IPv6的文章也可以阅读：《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-3236-1-1.html">Java对IPv6的支持详解：支持情况、相关API、演示代码等</a>》。</p>
+<p><strong>推荐阅读2：</strong>本文作者的另一篇同类文章《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-3868-1-1.html">网络编程入门从未如此简单(三)：什么是IPv6？漫画式图文，一篇即懂！</a>》。</p>
+<h2 id="复习一下什么是IPv4？"><a href="#复习一下什么是IPv4？" class="headerlink" title="复习一下什么是IPv4？"></a>复习一下什么是IPv4？</h2><p>IPv4是Internet Protocol version 4的缩写，中文翻译为互联网通信协议第四版，通常简称为网际协议版本4。</p>
+<p>IPv4使用32位（4字节）地址，因此地址空间中只有 4,294,967,296（即2^32） 个地址。</p>
+<p>IPv4地址可被写作任何表示一个32位整数值的形式，但为了方便人类阅读和分析，它通常被写作点分十进制的形式，即四个字节被分开用十进制写出，中间用点分隔。</p>
+<p><strong>通常IPv4地址的地址格式为 nnn.nnn.nnn.nnn，就像下面这样：</strong></p>
+<p>172.16.254.1</p>
+<p><strong>下图看起来更清晰一些：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/152806dod2ky676272di27.png" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x7.png"></p>
+<h2 id="IPv6又是什么？"><a href="#IPv6又是什么？" class="headerlink" title="IPv6又是什么？"></a>IPv6又是什么？</h2><p>IPv6是Internet Protocol version 6的缩写，中文翻译为互联网通信协议（TCP&#x2F;IP协议）第6版，通常简称为网际协议版6。IPv6具有比IPv4大得多的编码地址空间，用它来取代IPv4主要是为了解决IPv4地址枯竭问题，同时它也在其他方面对于IPv4有许多改进。</p>
+<p>其实，IPv6并不是新技术，从IPv6最早的工作组成立1992年到现在，已过去27年。在互联网技术的发展历程中，IPv6年龄甚至有些太大了。</p>
+<p>IPv6的“6”表示的是TCP&#x2F;IP协议的第六个版本，IPv4的“4”表示的是TCP&#x2F;IP协议的第四个版本。其实除了这两个版本，当然还有其它版本，TCP&#x2F;IP协议其实从IPv1开始，到现在IPv10都已经出现了，这些不同版本之间并没有关联，也不是简单IP地址长度的长短。</p>
+<p>IPv6地址由八组、每组四位16进制数字组成，每组之间由”：”来分隔。</p>
+<p><strong>看个简单的例子：</strong></p>
+<p>2610:00f8:0c34:67f9:0200:83ff:fe94:4c36，每个“：”前后都是4位16进制的数字，共分隔成8组。</p>
+<p><strong>如下图所示：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/154331qsnajbxb9mrs6jbq.png" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x9.png"></p>
+<p><strong>小知识：</strong>如何查看手机或者电脑的网络是否支持IPv6呢？<br>可以在你手机或者电脑上的浏览器中打开：<a target="_blank" rel="noopener" href="http://www.52im.net/Ipv6-test.com">Ipv6-test.com</a>，就像下图这样：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/154939od2im72kv2ni2vnm.png" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x8.png"></p>
+<h2 id="为什么要使用IPv6？"><a href="#为什么要使用IPv6？" class="headerlink" title="为什么要使用IPv6？"></a>为什么要使用IPv6？</h2><p>最主要的原因，就是地址数量不够用了。</p>
+<p>IPv4迄今为止已经使用了30多年。最早期的时候，互联网只是设计给美国军方用的，根本没有考虑到它会变得如此庞大，成为全球网络。</p>
+<p>尤其是进入21世纪后，随着计算机和智能手机的迅速普及，互联网开始爆发性发展，越来越多的上网设备出现，越来越多的人开始连接互联网。这就意味着，需要越来越多的IP地址。</p>
+<p>IPv4的地址总数是2的32次方，也就是约42.9亿个。而全球的网民总数早已超过这个数目。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/150537h81scgpswzmrjn7e.jpg" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x5.jpg"></p>
+<p>所以说，IPv4地址池接近枯竭，根本无法满足互联网发展的需要。人们迫切需要更高版本的IP协议，更大数量的IP地址池。（有点像固定电话号码升位。）</p>
+<h2 id="6IPv6会带给我们什么？"><a href="#6IPv6会带给我们什么？" class="headerlink" title="6IPv6会带给我们什么？"></a>6IPv6会带给我们什么？</h2><p>首先，最重要的一点，就是前面所说的地址池扩容。IPv4的地址池是约42.9亿，IPv6能达到多少呢？</p>
+<p><strong>数量如下：</strong></p>
+<p>340282366920938463463374607431768211456个…</p>
+<p>不用数了，太多了… 简单说，是2的128次方。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/143126mvdp5r5e6lv3lrde.jpg" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x1jpg.jpg"></p>
+<p>这个数量，即使是给地球上每一颗沙子都分配一个IP，也是妥妥够用的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/155118tzlenlbab3138kcb.png" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x10.png"></p>
+<p>▲ 这图你看懂了吗？嗯，我也没看懂，反正就是很多的样子</p>
+<p>这个数量值是怎么得来的呢？还是它的地址位长决定的。</p>
+<p>如果以二进制来写，IPv6的地址是128位。不过，这样写显然不太方便（一行都写不下）。所以，通常用十六进制来写，也就缩短成32位（32位会分为8组，每组4位）。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/143313fu2lwggzzi7lputi.jpg" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x2.jpg"></p>
+<p><strong>下面就是一个标准、合法的IPv6地址示例：</strong></p>
+<p>2001:0db8:85a3:08d3:1319:8a2e:0370:7344</p>
+<p><strong>注意：</strong>IPv6的地址是可以简写的，每项数字前导的0可以省略。</p>
+<p><strong>例如，下面这个地址：</strong><br>2001:0DB8:02de:0000:0000:0000:0000:0e13</p>
+<p><strong>粉红的“0”就可以省略，变成：</strong></p>
+<p>2001: DB8:2de:0:0:0:0:e13</p>
+<p><strong>如果有一组或连续几组都是0，那么可以简写成“::”，也就是：</strong></p>
+<p>2001: DB8:2de::e13</p>
+<p><strong>注意：</strong>一个IPv6地址，只能有一个“::”。</p>
+<p><strong>为什么？很简单，你看下面这四个地址，如果所有0全都缩写，会变成什么样？</strong></p>
+<p>2001:0000:0000:0000:0000:25de:0000:cade<br>2001: 0000: 0000:0000:25de:0000:0000:cade<br>2001: 0000: 0000:25de:0000:0000:0000:cade<br>2001: 0000: 25de:0000:0000:0000:0000:cade</p>
+<p>是的，都是2001::25de::cade，冲突了。所以，这个地址是非法的，不允许存在的。</p>
+<p>关于IPv6还有很多技术细节，因篇幅原因，不再赘述。</p>
+<p><strong>除了地址数量之外，IPv6还有很多优点，例如：</strong></p>
+<ul>
+<li>1）IPv6使用更小的路由表。使得路由器转发数据包的速度更快；</li>
+<li>2）IPv6增加了增强的组播支持以及对流的控制，对多媒体应用很有利，对服务质量（QoS）控制也很有利；</li>
+<li>3）IPv6加入了对自动配置的支持。这是对DHCP协议的改进和扩展，使得网络（尤其是局域网）的管理更加方便和快捷；</li>
+<li>4）IPv6具有更高的安全性。用户可以对网络层的数据进行加密并对IP报文进行校验，极大地增强了网络的安全性；</li>
+<li>5）IPv6具有更好的扩容能力。如果新的技术或应用需要时，IPV6允许协议进行扩充；</li>
+<li>6）IPv6具有更好的头部格式。IPV6使用新的头部格式，就简化和加速了路由选择过程，提高了效率；</li>
+<li>……</li>
+</ul>
+<h2 id="IPv6的优点这么多，为什么之前普及却这么慢？"><a href="#IPv6的优点这么多，为什么之前普及却这么慢？" class="headerlink" title="IPv6的优点这么多，为什么之前普及却这么慢？"></a>IPv6的优点这么多，为什么之前普及却这么慢？</h2><p>IPv6优点这么多，为什么它问世已经20年了，还是没有完全替代IPv4呢？这里面的水就很深了。。。说白了，主要还是和利益有关。</p>
+<h3 id="NAT这类技术，让IPv4得以续命"><a href="#NAT这类技术，让IPv4得以续命" class="headerlink" title="NAT这类技术，让IPv4得以续命"></a>NAT这类技术，让IPv4得以续命</h3><p>如果按照本世纪初专家们的预测，我们IPv4的地址早已枯竭几万次了。但是，一直挺到现在，大家仍然还在用IPv4，对老百姓来说，并没有因为地址不够而无法上网。</p>
+<p>这是为什么呢？ 就是因为除了IPv6之外，我们还有一些技术，可以变相地缓解地址不足。</p>
+<p>例如NAT（Network Address Translation，网络地址转换）。</p>
+<p>NAT是什么意思？当我们在家里或公司上网时，你的电脑肯定有一个类似192.168.0.1的地址，这种地址属于私网地址，不属于公共的互联网地址。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/145306l3zns5821l18juj3.jpg" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x3.jpg"></p>
+<p>▲ 一个典型的NAT应用场景（图自《<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38987057/article/details/81359401">IPv6，到底是什么？</a>》）</p>
+<p>每一个小的局域网，都会使用一个网段的私网地址，在与外界连接时，再变换成公网地址。这样一来，几十个或几百个电脑，都只需要一个公网地址。</p>
+<p>甚至还可以私网套私网，NAT套NAT，一层一层套。这样一来，大大节约了公网IP地址数量。正因为如此，才让我们“续命”到了今天，不至于无法上网。</p>
+<p>但是，NAT这种方式也有很多缺点，虽然私网地址访问互联网地址方便，但互联网地址访问私网地址就困难了。很多服务，都会受到限制，你只能通过复杂的设置才能解决，也会影响网络的处理效率。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/145519qsez2meng7bsw2j7.jpg" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x4.jpg"></p>
+<p>▲ NAT内网的计算机是不能被外网直接访问的（图自《<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38987057/article/details/81359401">IPv6，到底是什么？</a>》）</p>
+<h3 id="升级IPv6涉及运营商的利益"><a href="#升级IPv6涉及运营商的利益" class="headerlink" title="升级IPv6涉及运营商的利益"></a>升级IPv6涉及运营商的利益</h3><p>物以稀为贵，地址越稀缺，就越值钱。掌握地址的人，就越开心。谁开心？运营商和ISP（互联网服务提供商）。</p>
+<p>他们就像是经销商，从上游（互联网域名与号码分配机构，即ICANN）申请到IP地址，再卖给下游用户。稀缺没关系，反正，他一定能赚取更多的差价。</p>
+<p>如果大家去找运营商或ISP买带宽，或者租赁云服务，带公共地址的，一定比不带公共地址的贵很多很多。</p>
+<p>除了地址可以赚钱之外，如果升级支持IPv6，对运营商和ISP来说，也意味着很大的资金投入。现在新设备基本都是支持的，但毕竟还是有一些老设备，如果在使用寿命到期之前就换，就是亏钱。</p>
+<p>所以，运营商和ISP都没有动力去启用IPv6。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/155908wo4olmulj2rcxv32.png" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x11.png"></p>
+<p>至于设备商或手机电脑厂商，出于提前考虑，早已普遍支持了IPv6，意见并不是很大，也决定不了什么。必竟，提供基础设施服务的运营商们更强势。</p>
+<h2 id="IPv6未来会怎样"><a href="#IPv6未来会怎样" class="headerlink" title="IPv6未来会怎样"></a>IPv6未来会怎样</h2><p>随着5G时代的到来，有了IPv6的加持，万物互联或许会成为现实。对于我等实时通信类软件的开发人员来说，某些场景下，或许再也不需要为“P2P打洞”这种事情烦恼了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/152007eazi9zcttivsf76s.jpg" alt="网络编程懒人入门(十一)：一文读懂什么是IPv6_x6.jpg"></p>
+<p>▲ 5G+IPv6，万物互联不是梦</p>
+<p>未来已来，你准备好了吗？</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">KNeegcyao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/posts/b505a401.html">http://example.com/posts/b505a401.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">KNeegcyao</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/eb6629b4.html" title="网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门</div></div><div class="info-2"><div class="info-item-1">前言即时通讯网整理了大量的网络编程类基础文章和资料，包括《TCP&#x2F;IP协议...</div></div></div></a><a class="pagination-related" href="/posts/489e3df9.html" title="网络编程懒人入门（十二）:快速理解TCP和UDP的差异"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">网络编程懒人入门（十二）:快速理解TCP和UDP的差异</div></div><div class="info-2"><div class="info-item-1">引言HTTP3是HTTP协议的最新版本。从诞生之初，HTTP就是交换超文本文档的首选应用层协议。多年来，为了跟上互联网的发展，以及WWW上交换的内容种类增加，HTTP进行了几次重大升级，而HTTP&#x2F;3就是目前的最新版本。 本文将从HTTP&#x2F;3的基本概念、技术原理、应用场景和如何使用它等方面进行介绍，确保在有限的篇幅内，能让你通俗地理解它。  HTTP协议的演进史在万维网诞生之时，万维网仅仅是一群交换超文本文件的计算机。在计算机之间交换文件是一个简单的程序，包括请求和响应。在此基础上设计了一个简单的基于文本的协议。HTTP（超文本传输协议）应运而生。后来，它被起草成了一个标准化的IETF协议，定义在RFC...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/6c92115f.html" title="Spring"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/20241206224728342.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">Spring</div></div><div class="info-2"><div class="info-item-1">Spring介绍Spring是一个IOC（DI）和AOP框架Spring的优良特性  ·非侵入式：基于Spring开发的应用中的对象可以不依赖于Spring的API  ·依赖注入：DI是控制反转（IOC）最经典的实现  ·面向切面编程：AOP  ·组件化：Spring通过众多简单的组件配置组合成一个复杂应用  ·一站化：Spring提供了一系列框架，解决了应用开发中的众多问题 Spring模块划分  Spring-IOC容器组件和容器  ·组件：具有一定功能的对象。  ·容器：管理组件（创建，获取，保存，销毁）   可以将组件和容器的关系比喻成“房间”与“家具”的关系：   组件：可以看作是各种“家具”，比如桌子、椅子、灯、书架等。它们是构成界面或应用功能的基本元素，完成特定的功能任务，比如显示文本、输入数据等。  容器：则是“房间”或“空间”，用于装下各种家具。容器负责管理组件的布局、位置和相互之间的关系，同时也可能控制组件的生命周期和事件传递。  常见的容器：Servlet 容器（如 Tomcat、Jetty）：用于管理和运行 Java Web 应用，处理 HTTP...</div></div></div></a><a class="pagination-related" href="/posts/25b12d17.html" title="网络编程懒人入门（一）:快速理解网络通信协议（上篇）"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">网络编程懒人入门（一）:快速理解网络通信协议（上篇）</div></div><div class="info-2"><div class="info-item-1">正文引言我们每天使用互联网，你是否想过，它是如何实现的？ 全世界几十亿台电脑，连接在一起，两两通信。上海的某一块网卡送出信号，洛杉矶的另一块网卡居然就收到了，两者实际上根本不知道对方的物理位置，你不觉得这是很神奇的事情吗？ 互联网的核心是一系列协议，总称为”互联网协议”（Internet Protocol...</div></div></div></a><a class="pagination-related" href="/posts/a90dbf1.html" title="网络编程懒人入门（三）:快速理解TCP协议一篇就够"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-09</div><div class="info-item-2">网络编程懒人入门（三）:快速理解TCP协议一篇就够</div></div><div class="info-2"><div class="info-item-1">前言本系列文章的前两篇《网络编程懒人入门(一)：快速理解网络通信协议（上篇）》、《网络编程懒人入门(二)：快速理解网络通信协议（下篇）》快速介绍了网络基本通信协议及理论基础，建议开始阅读本文前先读完此2篇文章。 TCP 是互联网的核心协议之一，鉴于它的重要性，本文将单独介绍它的基础知识，希望能加深您对TCP协议的理解。 老规矩，为了让文字尽量通俗易懂、不浪费你的脑细胞，本文尽量点到为止，不对理论进行深入挖掘，如需深入理论细节，请参见下方参考资料中有关TCP协议的详细介绍和学习文章。 群神镇楼：  TCP 协议的作用互联网由一整套协议构成。TCP 只是其中的一层，有着自己的分工。  ▲ TCP 是以太网协议和 IP 协议的上层协议，也是应用层协议的下层协议 最底层的以太网协议（Ethernet）规定了电子信号如何组成数据包（packet），解决了子网内部的点对点通信。  ▲ 以太网协议解决了局域网的点对点通信 但是，以太网协议不能解决多个局域网如何互通，这由 IP 协议解决。  ▲ IP 协议可以连接多个局域网 IP 协议定义了一套自己的地址规则，称为 IP...</div></div></div></a><a class="pagination-related" href="/posts/1750dad.html" title="网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-09</div><div class="info-item-2">网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势</div></div><div class="info-2"><div class="info-item-1">前言对于即时通讯开者新手来说，在开始着手编写IM或消息推送系统的代码前，最头疼的问题莫过于到底该选TCP还是UDP作为传输层协议。本文延续《网络编程懒人入门》系列文章的风格，通过快速对比分析 TCP 和 UDP...</div></div></div></a><a class="pagination-related" href="/posts/2de5e4a.html" title="网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-09</div><div class="info-item-2">网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？</div></div><div class="info-2"><div class="info-item-1">前言标题虽然是为了解释有了 IP 地址，为什么还要用 MAC 地址，但是本文的重点在于理解为什么要有 IP 这样的东西。本文对读者的定位是知道 MAC 地址是什么，IP 地址是什么。 关于作者 翟志军，个人博客地址：https://showme.codes/，Github：https://github.com/zacker330。感谢作者的原创分享。 书上说的*基本概念：* 如今的网络是分层来实现的，就像是搭积木一样，先设计某个特定功能的模块，然后把模块拼起来组成整个网络。局域网也不例外，一般来说，在组网上我们使用的是[IEEE802](https://baike.baidu.com/item/IEEE...</div></div></div></a><a class="pagination-related" href="/posts/7b1a8364.html" title="网络编程懒人入门（二）:快速理解网络通信协议（下篇）"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-09</div><div class="info-item-2">网络编程懒人入门（二）:快速理解网络通信协议（下篇）</div></div><div class="info-2"><div class="info-item-1">前言本文上篇《网络编程懒人入门(一)：快速理解网络通信协议（上篇）》分析了互联网的总体构思，从下至上，每一层协议的设计思想。基于知识连贯性的考虑，建议您先看完上篇后再来阅读本文。 本文从设计者的角度看问题，今天我想切换到用户的角度，看看用户是如何从上至下，与这些协议互动的。 一个小结先对前面的内容，做一个小结（详见本文上篇《网络编程懒人入门(一)：快速理解网络通信协议（上篇）》）。 我们已经知道，网络通信就是交换数据包。电脑A向电脑B发送一个数据包，后者收到了，回复一个数据包，从而实现两台电脑之间的通信。 数据包的结构，基本上是下面这样：  发送这个包，需要知道两个地址：  * 对方的MAC地址； *...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/dbec14fc4bb3795ba2556e8a82eaee0f.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">KNeegcyao</div><div class="author-info-description">记录coding！</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/KNeegcyao"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/KNeegcyao" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:zhangchao2903@163.com.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=322815684" target="_blank" title="云音乐"><i class="fa-solid fa-music"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E4%B9%A0%E4%B8%80%E4%B8%8B%E4%BB%80%E4%B9%88%E6%98%AFIPv4%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">复习一下什么是IPv4？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPv6%E5%8F%88%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">IPv6又是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8IPv6%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">为什么要使用IPv6？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6IPv6%E4%BC%9A%E5%B8%A6%E7%BB%99%E6%88%91%E4%BB%AC%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">6IPv6会带给我们什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPv6%E7%9A%84%E4%BC%98%E7%82%B9%E8%BF%99%E4%B9%88%E5%A4%9A%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B9%8B%E5%89%8D%E6%99%AE%E5%8F%8A%E5%8D%B4%E8%BF%99%E4%B9%88%E6%85%A2%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">IPv6的优点这么多，为什么之前普及却这么慢？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT%E8%BF%99%E7%B1%BB%E6%8A%80%E6%9C%AF%EF%BC%8C%E8%AE%A9IPv4%E5%BE%97%E4%BB%A5%E7%BB%AD%E5%91%BD"><span class="toc-number">6.1.</span> <span class="toc-text">NAT这类技术，让IPv4得以续命</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%87%E7%BA%A7IPv6%E6%B6%89%E5%8F%8A%E8%BF%90%E8%90%A5%E5%95%86%E7%9A%84%E5%88%A9%E7%9B%8A"><span class="toc-number">6.2.</span> <span class="toc-text">升级IPv6涉及运营商的利益</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPv6%E6%9C%AA%E6%9D%A5%E4%BC%9A%E6%80%8E%E6%A0%B7"><span class="toc-number">7.</span> <span class="toc-text">IPv6未来会怎样</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/a90dbf1.html" title="网络编程懒人入门（三）:快速理解TCP协议一篇就够"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（三）:快速理解TCP协议一篇就够"/></a><div class="content"><a class="title" href="/posts/a90dbf1.html" title="网络编程懒人入门（三）:快速理解TCP协议一篇就够">网络编程懒人入门（三）:快速理解TCP协议一篇就够</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1750dad.html" title="网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势"/></a><div class="content"><a class="title" href="/posts/1750dad.html" title="网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势">网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/2de5e4a.html" title="网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？"/></a><div class="content"><a class="title" href="/posts/2de5e4a.html" title="网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？">网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b0dbfb54.html" title="网络编程懒人入门（七）:深入浅出，全面理解HTTP协议"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（七）:深入浅出，全面理解HTTP协议"/></a><div class="content"><a class="title" href="/posts/b0dbfb54.html" title="网络编程懒人入门（七）:深入浅出，全面理解HTTP协议">网络编程懒人入门（七）:深入浅出，全面理解HTTP协议</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/eb6629b4.html" title="网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门"/></a><div class="content"><a class="title" href="/posts/eb6629b4.html" title="网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门">网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/f351ca6264cb84d5053926824a04634af351ca6264cb84d5053926824a04634a);"><div id="footer-wrap"><div class="copyright">&copy;2024 By KNeegcyao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.8" zIndex="-1" count="200" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="Java,Spring,k8s,MVC,Redis,Mysql,JVM,Maven,Docker" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

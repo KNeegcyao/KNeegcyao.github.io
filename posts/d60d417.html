@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>网络编程懒人入门（十三）:一泡尿的时间，快速搞懂TCP和UDP的区别 | KNeegcyao</title><meta name="author" content="KNeegcyao"><meta name="copyright" content="KNeegcyao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="引言网络协议是每个搞网络通信应用开发（比如IM、推送、网关等等）的程序员都必须要掌握的基础知识，TCP&#x2F;IP协议簇中有两个最具有代表性的传输层协议——分别是 TCP 和 UDP。 有过网络通信开发经验的同学们都知道，TCP和UDP协议是平时用的最多的两种协议，而对于很多人来说，什么时候以及什么场景下该用TCP还是UDP？这是个经久不息的讨论话题。 不同于其它长篇大论，本文尽量以简洁精炼的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程懒人入门（十三）:一泡尿的时间，快速搞懂TCP和UDP的区别">
+<meta property="og:url" content="http://example.com/posts/d60d417.html">
+<meta property="og:site_name" content="KNeegcyao">
+<meta property="og:description" content="引言网络协议是每个搞网络通信应用开发（比如IM、推送、网关等等）的程序员都必须要掌握的基础知识，TCP&#x2F;IP协议簇中有两个最具有代表性的传输层协议——分别是 TCP 和 UDP。 有过网络通信开发经验的同学们都知道，TCP和UDP协议是平时用的最多的两种协议，而对于很多人来说，什么时候以及什么场景下该用TCP还是UDP？这是个经久不息的讨论话题。 不同于其它长篇大论，本文尽量以简洁精炼的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg">
+<meta property="article:published_time" content="2024-12-09T07:24:59.000Z">
+<meta property="article:modified_time" content="2024-12-09T07:05:10.584Z">
+<meta property="article:author" content="KNeegcyao">
+<meta property="article:tag" content="基础知识">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/posts/d60d417.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'https://fancyapps.com/fancybox/',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络编程懒人入门（十三）:一泡尿的时间，快速搞懂TCP和UDP的区别',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/15189043253972288);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/dbec14fc4bb3795ba2556e8a82eaee0f.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/f351ca6264cb84d5053926824a04634af351ca6264cb84d5053926824a04634a);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/dbec14fc4bb3795ba2556e8a82eaee0f.jpg" alt="Logo"><span class="site-name">KNeegcyao</span></a><a class="nav-page-title" href="/"><span class="site-name">网络编程懒人入门（十三）:一泡尿的时间，快速搞懂TCP和UDP的区别</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">网络编程懒人入门（十三）:一泡尿的时间，快速搞懂TCP和UDP的区别</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-09T07:05:10.584Z" title="更新于 2024-12-09 15:05:10">2024-12-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>网络协议是每个搞网络通信应用开发（比如IM、推送、网关等等）的程序员都必须要掌握的基础知识，TCP&#x2F;IP协议簇中有两个最具有代表性的传输层协议——分别是 TCP 和 UDP。</p>
+<p>有过网络通信开发经验的同学们都知道，TCP和UDP协议是平时用的最多的两种协议，而对于很多人来说，什么时候以及什么场景下该用TCP还是UDP？这是个经久不息的讨论话题。</p>
+<p><strong>不同于其它长篇大论，本文尽量以简洁精炼的文字，帮你总结归纳TCP和UDP协议的主要区别，方便那些想掌握这方面知识又不愿意耗费太多时间去系统地学习网络理论基础的同学快速理解！</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/162810bk0q6q0491q81u81.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_x2_opti.png"></p>
+<p><strong>推荐阅读：</strong>为了加深理解，本系列的另一篇《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1160-1-1.html">网络编程懒人入门(四)：快速理解TCP和UDP的差异</a>》也可以一并阅读。</p>
+<h2 id="快速理解TCP-IP协议簇"><a href="#快速理解TCP-IP协议簇" class="headerlink" title="快速理解TCP&#x2F;IP协议簇"></a>快速理解TCP&#x2F;IP协议簇</h2><p>计算机与网络设备要相互通信，双方就必须基于相同的方法。比如：如何探测到通信目标、由哪一边先发起通信、使用哪种语言进行通信、怎样结束通信等规则都需要事先确定。不同的硬件、操作系统之间的通信，所有的这一切都需要一种规则。而我们就把这种规则称为协议（protocol）。</p>
+<p>TCP&#x2F;IP 是互联网相关的各类协议族的总称，比如：TCP，UDP，IP，FTP，HTTP，ICMP，SMTP 等都属于 TCP&#x2F;IP 族内的协议。</p>
+<p>TCP&#x2F;IP模型是互联网的基础，它是一系列网络协议的总称。这些协议可以划分为四层，分别为链路层、网络层、传输层和应用层。</p>
+<p><strong>具体是：</strong></p>
+<ul>
+<li>***1）***链路层：负责封装和解封装IP报文，发送和接受ARP&#x2F;RARP报文等；</li>
+<li>***2）***网络层：负责路由以及把分组报文发送给目标网络或主机；</li>
+<li>***3）***传输层：负责对报文进行分组和重组，并以TCP或UDP协议格式封装报文；</li>
+<li>***4）***应用层：负责向用户提供应用程序，比如HTTP、FTP、Telnet、DNS、SMTP等。</li>
+</ul>
+<p><strong>下面这张表格进行了了归纳：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/165013dehz1e15et0zigri.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_1.png"></p>
+<p><strong>下面这张图，更生动的反映了TCP&#x2F;IP协议族的关系情况（</strong><a target="_blank" rel="noopener" href="http://www.52im.net/thread-180-1-1.html">高清图从这里下载</a><strong>）：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/194457q7qtv9ddjkrxwh93.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_1-2.png"></p>
+<p>在网络体系结构中，网络通信的建立必须是在通信双方的对等层进行，不能交错。</p>
+<p>在整个数据传输过程中，数据在发送端时经过各层时都要附加上相应层的协议头和协议尾（仅数据链路层需要封装协议尾）部分，也就是要对数据进行协议封装，以标识对应层所用的通信协议。</p>
+<p>有关TCP&#x2F;IP协议簇的知识，几本书都写不完，这里我就不再赘述了，有兴趣可以读一读《<a target="_blank" rel="noopener" href="http://www.52im.net/topic-tcpipvol1.html">TCP&#x2F;IP详解 卷1：协议（在线阅读）</a>》。</p>
+<p><strong>另外，学习知识，我特别喜欢了解技术之外的一些知识，比如下面两篇：</strong></p>
+<ul>
+<li>《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-520-1-1.html">技术往事：改变世界的TCP&#x2F;IP协议（珍贵多图、手机慎点）</a>》</li>
+<li>《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-2976-1-1.html">5G时代已经到来，TCP&#x2F;IP老矣，尚能饭否？</a>》</li>
+</ul>
+<p>接下来，我们将回到正题，学习TCP&#x2F;IP 中有两个具有代表性的传输层协议——TCP 和 UDP。</p>
+<h2 id="快速理解UDP协议"><a href="#快速理解UDP协议" class="headerlink" title="快速理解UDP协议"></a>快速理解UDP协议</h2><h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><p><strong>UDP协议：</strong>全称是用户数据报协议，在网络中它与TCP协议一样用于处理数据包，是一种无连接的协议。</p>
+<p>在OSI模型中，处在第四层——传输层，处于IP协议的上一层（见下图）。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/171053neh9abbe2jfhy2zf.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_2-0.png"></p>
+<p>▲ 上图引用自《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-180-1-1.html">计算机网络通讯协议关系图</a>》</p>
+<p>UDP有不提供数据包分组、组装和不能对数据包进行排序的缺点，也就是说，当报文发送之后，是无法得知其是否安全完整到达的。</p>
+<p>UDP协议的几个主要特别，我进行归纳，下面的下节将逐一说明。</p>
+<h3 id="面向无连接"><a href="#面向无连接" class="headerlink" title="面向无连接"></a>面向无连接</h3><p>首先 UDP 是不需要和 TCP一样在发送数据前进行三次握手建立连接的，想发数据就可以开始发送了。并且也只是数据报文的搬运工，不会对数据报文进行任何拆分和拼接操作。</p>
+<p><strong>具体来说就是：</strong></p>
+<ul>
+<li>***1）***在发送端：应用层将数据传递给传输层的 UDP 协议，UDP 只会给数据增加一个 UDP 头标识下是 UDP 协议，然后就传递给网络层了；</li>
+<li>***2）***在接收端：网络层将数据传递给传输层，UDP 只去除 IP 报文头就传递给应用层，不会任何拼接操作。</li>
+</ul>
+<h3 id="支持单播、多播、广播"><a href="#支持单播、多播、广播" class="headerlink" title="支持单播、多播、广播"></a>支持单播、多播、广播</h3><p>UDP 不止支持一对一的传输方式，同样支持一对多，多对多，多对一的方式，也就是说 UDP 提供了单播、多播、广播的功能。</p>
+<h3 id="面向报文"><a href="#面向报文" class="headerlink" title="面向报文"></a>面向报文</h3><p>UDP协议是面向报文的。</p>
+<p>发送方的UDP对应用程序交下来的报文，在添加首部后就向下交付IP层。UDP对应用层交下来的报文，既不合并，也不拆分，而是保留这些报文的边界。</p>
+<p>因此，应用程序必须选择合适大小的报文（见《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-29-1-1.html">UDP中一个包的大小最大能多大？</a>》）。</p>
+<h3 id="不可靠性"><a href="#不可靠性" class="headerlink" title="不可靠性"></a>不可靠性</h3><p>UDP的不可靠性首先体现在无连接上，通信的双方不需要建立连接，想发就发，这样的情况肯定不可靠。</p>
+<p>并且收到什么数据就传递什么数据，并且也不会备份数据，发送数据也不会关心对方是否已经正确接收到数据了。</p>
+<p>再者网络环境时好时坏，但是 UDP 因为没有拥塞控制，一直会以恒定的速度发送数据（即使网络条件不好，也不会对发送速率进行调整）。</p>
+<p>这样实现的弊端就是在网络条件不好的情况下可能会导致丢包，但是优点也很明显，在某些实时性要求高的场景（比如电话会议）就需要使用 UDP 而不是 TCP（见《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1277-1-1.html">网络编程懒人入门(五)：快速理解为什么说UDP有时比TCP更有优势</a>》）。</p>
+<p><strong>下面这个动图可以很好的说明UDP的不可靠性：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/231223sk8gkng3803yalan.gif" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_00000.gif"></p>
+<p>从上面的动图可以得知，UDP只会把想发的数据报文一股脑的丢给对方，并不在意数据有无安全完整到达。</p>
+<h3 id="头部开销小"><a href="#头部开销小" class="headerlink" title="头部开销小"></a>头部开销小</h3><p>UDP协议头部开销小（如下图所示），传输数据报文时是很高效的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/173021u6382826znld7zzj.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_3-1.png"></p>
+<p>▲ 上图引用自《<a target="_blank" rel="noopener" href="http://www.52im.net/topic-tcpipvol1.html">TCP&#x2F;IP详解</a> - <a target="_blank" rel="noopener" href="http://docs.52im.net/extend/docs/book/tcpip/vol1/11/">第11章·UDP协议</a>》</p>
+<p><strong>UDP 头部包含了以下几个数据：</strong></p>
+<ul>
+<li>***1）***两个十六位的端口号，分别为源端口（可选字段）和目标端口；</li>
+<li>***2）***整个数据报文的长度；</li>
+<li>***3）***整个数据报文的检验和（IPv4 可选 字段），该字段用于发现头部信息和数据中的错误。</li>
+</ul>
+<p>因此 UDP 的头部开销小，只有8字节，相比 TCP 的至少20字节要少得多，在传输数据报文时是很高效的。</p>
+<p><strong>作为对比，下图是TCP协议的头部开销：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/193619szr7ww7f8l3fg7fp.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_3-2.png"></p>
+<p>▲ 上图引用自《<a target="_blank" rel="noopener" href="http://www.52im.net/topic-tcpipvol1.html">TCP&#x2F;IP详解</a> - <a target="_blank" rel="noopener" href="http://docs.52im.net/extend/docs/book/tcpip/vol1/17/">第17章·TCP协议</a>》</p>
+<h3 id="更全面地学习UDP协议"><a href="#更全面地学习UDP协议" class="headerlink" title="更全面地学习UDP协议"></a>更全面地学习UDP协议</h3><p>UDP协议相对来说比较简单易学，如果觉得理论上有所欠缺，可以通过网络经典书籍《<a target="_blank" rel="noopener" href="http://www.52im.net/topic-tcpipvol1.html">TCP&#x2F;IP详解</a> - <a target="_blank" rel="noopener" href="http://docs.52im.net/extend/docs/book/tcpip/vol1/11/">第11章·UDP：用户数据报协议</a>》中的章节来补充。</p>
+<p><strong>其实生产应用时，UDP协议也有它复杂的一面，下面这几篇值得学习一下：</strong></p>
+<p>《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1018-1-1.html">不为人知的网络编程(五)：UDP的连接性和负载均衡</a>》<br>《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1024-1-1.html">不为人知的网络编程(六)：深入地理解UDP协议并用好它</a>》<br>《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1293-1-1.html">不为人知的网络编程(七)：如何让不可靠的UDP变的可靠？</a>》</p>
+<p>另外，随着近年来Google等互联网大厂大力推广Quic协议，UDP协议在新时代移动互联网环境下或许能找到更多的应用场景，有兴趣的读者可以学习一下QUIC协议：《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-2816-1-1.html">网络编程懒人入门(十)：一泡尿的时间，快速读懂QUIC协议</a>》、《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1309-1-1.html">技术扫盲：新一代基于UDP的低延时网络传输层协议——QUIC详解</a>》、《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1407-1-1.html">让互联网更快：新一代QUIC协议在腾讯的技术实践分享</a>》。</p>
+<h2 id="快速理解TCP协议"><a href="#快速理解TCP协议" class="headerlink" title="快速理解TCP协议"></a>快速理解TCP协议</h2><h3 id="基本介绍-1"><a href="#基本介绍-1" class="headerlink" title="基本介绍"></a>基本介绍</h3><p>当一台计算机想要与另一台计算机通讯时，两台计算机之间的通信需要畅通且可靠，这样才能保证正确收发数据。</p>
+<p><strong>例如：</strong>当你想查看网页或查看电子邮件时，希望完整且按顺序查看网页，而不丢失任何内容。当你下载文件时，希望获得的是完整的文件，而不仅仅是文件的一部分，因为如果数据丢失或乱序，都不是你希望得到的结果，于是就用到了TCP。</p>
+<p><strong>TCP协议：</strong>全称是传输控制协议是一种面向连接的、可靠的、基于字节流的传输层通信协议，由 IETF 的<a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc793">RFC 793</a>定义。</p>
+<p>TCP 是面向连接的、可靠的流协议。流就是指不间断的数据结构，你可以把它想象成排水管中的水流。</p>
+<p>有关TCP协议的理论可以继续阅读《<a target="_blank" rel="noopener" href="http://www.52im.net/topic-tcpipvol1.html">TCP&#x2F;IP详解</a> - <a target="_blank" rel="noopener" href="http://docs.52im.net/extend/docs/book/tcpip/vol1/17/">第17章·TCP：传输控制协议</a>》，限于篇幅这里就展开了。</p>
+<p>接下来我们逐个介绍TCP最主要的几个特点。</p>
+<h3 id="TCP连接过程（3次握手）"><a href="#TCP连接过程（3次握手）" class="headerlink" title="TCP连接过程（3次握手）"></a>TCP连接过程（3次握手）</h3><p><strong>如下图所示，这是建立一个TCP连接的过程（</strong>俗称“3次握手”<strong>）:</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/201106cgx1barg1onobvbc.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_4.png"></p>
+<p>*<strong>1）*第一次握手：</strong>客户端向服务端发送连接请求报文段。该报文段中包含自身的数据通讯初始序号。请求发送后，客户端便进入 SYN-SENT 状态。</p>
+<p>*<strong>2）*第二次握手：</strong>服务端收到连接请求报文段后，如果同意连接，则会发送一个应答，该应答中也会包含自身的数据通讯初始序号，发送完成后便进入 SYN-RECEIVED 状态。</p>
+<p>*<strong>3）*第三次握手：</strong>当客户端收到连接同意的应答后，还要向服务端发送一个确认报文。客户端发完这个报文段后便进入 ESTABLISHED 状态，服务端收到这个应答后也进入 ESTABLISHED 状态，此时连接建立成功。</p>
+<p><strong>这里可能大家会有个疑惑：</strong>为什么 TCP 建立连接需要三次握手，而不是两次？这是因为这是为了防止出现失效的连接请求报文段被服务端接收的情况，从而产生错误。</p>
+<p><strong>下面的动画演示了3次握手过程，可能更好懂一些：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/225702ql92x55votxtq124.gif" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_11111.gif"></p>
+<p>▲ 动图引用自《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1729-1-1.html">跟着动画来学TCP三次握手和四次挥手</a>》</p>
+<h3 id="TCP断开链接（4次挥手）"><a href="#TCP断开链接（4次挥手）" class="headerlink" title="TCP断开链接（4次挥手）"></a>TCP断开链接（4次挥手）</h3><p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/201132s99qyq23vv9ygqmg.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_6.png"></p>
+<p>TCP 是全双工的，如上图所示，在断开连接时两端都需要发送 FIN 和 ACK。</p>
+<p>*<strong>1）*第一次挥手：</strong>若客户端 A 认为数据发送完成，则它需要向服务端 B 发送连接释放请求。</p>
+<p>*<strong>2）*第二次挥手：</strong>B 收到连接释放请求后，会告诉应用层要释放 TCP 链接。然后会发送 ACK 包，并进入 CLOSE_WAIT 状态，此时表明 A 到 B 的连接已经释放，不再接收 A 发的数据了。但是因为 TCP 连接是双向的，所以 B 仍旧可以发送数据给 A。</p>
+<p>*<strong>3）*第三次挥手：</strong>B 如果此时还有没发完的数据会继续发送，完毕后会向 A 发送连接释放请求，然后 B 便进入 LAST-ACK 状态。</p>
+<p>*<strong>4）*第四次挥手：</strong>A 收到释放请求后，向 B 发送确认应答，此时 A 进入 TIME-WAIT 状态。该状态会持续 2MSL（最大段生存期，指报文段在网络中生存的时间，超时会被抛弃） 时间，若该时间段内没有 B 的重发请求的话，就进入 CLOSED 状态。当 B 收到确认应答后，也便进入 CLOSED 状态。</p>
+<p><strong>关于TCP的4次挥手，下面的动画或许更生动一些：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/230006sl1wt95ntiz9nn1n.gif" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_22222.gif"></p>
+<p>▲ 动图引用自《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1729-1-1.html">跟着动画来学TCP三次握手和四次挥手</a>》</p>
+<p>正确理解TCP 3次握手和4次挥手过程，是非常重要的，限于篇幅，本文没办法进一步深入展开，有兴趣的同事可以进一步深入阅读以几篇专题文章：</p>
+<ul>
+<li>《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-1729-1-1.html">脑残式网络编程入门(一)：跟着动画来学TCP三次握手和四次挥手</a>》</li>
+<li>《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-258-1-1.html">理论经典：TCP协议的3次握手与4次挥手过程详解</a>》</li>
+<li>《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-275-1-1.html">理论联系实际：Wireshark抓包分析TCP 3次握手、4次挥手过程</a>》</li>
+</ul>
+<h3 id="TCP协议要点归纳"><a href="#TCP协议要点归纳" class="headerlink" title="TCP协议要点归纳"></a>TCP协议要点归纳</h3><p>*<strong>1）面向连接：*</strong></p>
+<p>面向连接，是指发送数据之前必须在两端建立连接。</p>
+<p>建立连接的方法是“三次握手”，这样能建立可靠的连接。建立连接，是为数据的可靠传输打下了基础。</p>
+<p>*<strong>2）仅支持单播传输：*</strong></p>
+<p>每条TCP传输连接只能有两个端点，只能进行点对点的数据传输，不支持多播和广播传输方式。</p>
+<p>*<strong>3）面向字节流：*</strong></p>
+<p>TCP不像UDP一样那样一个个报文独立地传输，而是在不保留报文边界的情况下以字节流方式进行传输。</p>
+<p>*<strong>4）可靠传输：*</strong></p>
+<p>对于可靠传输、判断丢包、误码，靠的是TCP的段编号以及确认号。</p>
+<p>TCP为了保证报文传输的可靠，就给每个包一个序号，同时序号也保证了传送到接收端实体的包的按序接收。</p>
+<p>然后接收端实体对已成功收到的字节发回一个相应的确认（ACK）：如果发送端实体在合理的往返时延（RTT）内未收到确认，那么对应的数据（假设丢失了）将会被重传。</p>
+<p>关于可靠传输的理论，可以深入学习《<a target="_blank" rel="noopener" href="http://www.52im.net/topic-tcpipvol1.html">TCP&#x2F;IP详解</a> - <a target="_blank" rel="noopener" href="http://docs.52im.net/extend/docs/book/tcpip/vol1/21/">第21章·TCP的超时与重传</a>》，这里就不深入展开了。</p>
+<p>*<strong>5）提供拥塞控制：*</strong></p>
+<p>当网络出现拥塞的时候，TCP能够减小向网络注入数据的速率和数量，缓解拥塞。</p>
+<p>TCP中有关拥塞控制的文章通都比较枯燥，这篇《<a target="_blank" rel="noopener" href="http://www.52im.net/thread-515-1-1.html">通俗易懂-深入理解TCP协议（下）：RTT、滑动窗口、拥塞处理</a>》相对来说讲的比较易懂，有兴趣可以深入读读。</p>
+<p>*<strong>6）TCP提供全双工通信：*</strong></p>
+<p>TCP允许通信双方的应用程序在任何时候都能发送数据，因为TCP连接的两端都设有缓存，用来临时存放双向通信的数据。</p>
+<p>当然，TCP可以立即发送一个数据段，也可以缓存一段时间以便一次发送更多的数据段（最大的数据段大小取决于MSS）。</p>
+<h3 id="更全面地学习TCP协议"><a href="#更全面地学习TCP协议" class="headerlink" title="更全面地学习TCP协议"></a>更全面地学习TCP协议</h3><p>TCP协议涉及的内容比较丰富，真要方方面面展来讲，三天三夜也讲不完。不过，对于网络应用的开发者来说，根据自已应用所涉及技术的深度按需学习就可以了。</p>
+<p>初学者建议先把理论夯实，比如从《<a target="_blank" rel="noopener" href="http://www.52im.net/topic-tcpipvol1.html">TCP&#x2F;IP详解</a> - <a target="_blank" rel="noopener" href="http://docs.52im.net/extend/docs/book/tcpip/vol1/17/">第17章·TCP：传输控制协议</a>》这本经典书籍开始。</p>
+<h2 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h2><p><strong>TCP和UDP的区别可以归纳为下面这张表格：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/214508pdzzl11aybjvjjv1.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_7.png"></p>
+<p><strong>简单来说，TCP和UDP的区别就是：</strong></p>
+<ul>
+<li>***1）***TCP向上层提供面向连接的可靠服务 ，UDP向上层提供无连接不可靠服务；</li>
+<li>***2）***虽然 UDP 并没有 TCP 传输来的准确，但是也能在很多实时性要求高的地方有所作为；</li>
+<li>***3）***对数据准确性要求高，速度可以相对较慢的，可以选用TCP。</li>
+</ul>
+<p><strong>最后，想用一张图来生动地概括一下TCP与UDP的区别：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/214652lfdvu2vzqdv24vyy.png" alt="网络编程懒人入门(十三)：一泡尿的时间，快速搞懂TCP和UDP的区别_x1.png"></p>
+<p><strong>正如上图所示：</strong>TCP就像左边的妹子——喝起水来有条不紊、滴水不漏，UDP就像右边的妹子——甭管能喝到多少、倒就完了。。。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">KNeegcyao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/posts/d60d417.html">http://example.com/posts/d60d417.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">KNeegcyao</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/489e3df9.html" title="网络编程懒人入门（十二）:快速理解TCP和UDP的差异"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">网络编程懒人入门（十二）:快速理解TCP和UDP的差异</div></div><div class="info-2"><div class="info-item-1">引言HTTP3是HTTP协议的最新版本。从诞生之初，HTTP就是交换超文本文档的首选应用层协议。多年来，为了跟上互联网的发展，以及WWW上交换的内容种类增加，HTTP进行了几次重大升级，而HTTP&#x2F;3就是目前的最新版本。 本文将从HTTP&#x2F;3的基本概念、技术原理、应用场景和如何使用它等方面进行介绍，确保在有限的篇幅内，能让你通俗地理解它。  HTTP协议的演进史在万维网诞生之时，万维网仅仅是一群交换超文本文件的计算机。在计算机之间交换文件是一个简单的程序，包括请求和响应。在此基础上设计了一个简单的基于文本的协议。HTTP（超文本传输协议）应运而生。后来，它被起草成了一个标准化的IETF协议，定义在RFC...</div></div></div></a><a class="pagination-related" href="/posts/9e2fd0d3.html" title="网络编程懒人入门（十五）:外行也能读懂的网络硬件设备功能原理速成"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">网络编程懒人入门（十五）:外行也能读懂的网络硬件设备功能原理速成</div></div><div class="info-2"><div class="info-item-1">引言本文是《网络编程懒人入门》系列文章的第15篇，本篇将继续以通俗易懂的文字，帮你无脑理解各种基础网络硬件设备的功能原理。 本文不罗列复杂、全面的计算机网络理论，目的是让阅读者脱离以往计算机理论专著的枯燥内容，在寓教于乐的语言文字中轻松快速的掌握这些知识，适合入门者，计网大佬和网络编程老油条们请略过。  如何连接个人计算机（PC）？在发明网络之前，个人计算机之间是独立工作的，没有网卡、网线或协议栈，主要使用磁盘、CD 和其他东西来传输数据。  后来，网线出现了。 最小的网络单元由网线、网卡和协议栈组成：  1）网线起着物理介质的作用，以传输比特流 &#x2F; 电信号； 2）网卡将转换数据（例如：它将计算机存储的数据转换为网线的比特流 &#x2F;...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/6c92115f.html" title="Spring"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/20241206224728342.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">Spring</div></div><div class="info-2"><div class="info-item-1">Spring介绍Spring是一个IOC（DI）和AOP框架Spring的优良特性  ·非侵入式：基于Spring开发的应用中的对象可以不依赖于Spring的API  ·依赖注入：DI是控制反转（IOC）最经典的实现  ·面向切面编程：AOP  ·组件化：Spring通过众多简单的组件配置组合成一个复杂应用  ·一站化：Spring提供了一系列框架，解决了应用开发中的众多问题 Spring模块划分  Spring-IOC容器组件和容器  ·组件：具有一定功能的对象。  ·容器：管理组件（创建，获取，保存，销毁）   可以将组件和容器的关系比喻成“房间”与“家具”的关系：   组件：可以看作是各种“家具”，比如桌子、椅子、灯、书架等。它们是构成界面或应用功能的基本元素，完成特定的功能任务，比如显示文本、输入数据等。  容器：则是“房间”或“空间”，用于装下各种家具。容器负责管理组件的布局、位置和相互之间的关系，同时也可能控制组件的生命周期和事件传递。  常见的容器：Servlet 容器（如 Tomcat、Jetty）：用于管理和运行 Java Web 应用，处理 HTTP...</div></div></div></a><a class="pagination-related" href="/posts/25b12d17.html" title="网络编程懒人入门（一）:快速理解网络通信协议（上篇）"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">网络编程懒人入门（一）:快速理解网络通信协议（上篇）</div></div><div class="info-2"><div class="info-item-1">正文引言我们每天使用互联网，你是否想过，它是如何实现的？ 全世界几十亿台电脑，连接在一起，两两通信。上海的某一块网卡送出信号，洛杉矶的另一块网卡居然就收到了，两者实际上根本不知道对方的物理位置，你不觉得这是很神奇的事情吗？ 互联网的核心是一系列协议，总称为”互联网协议”（Internet Protocol...</div></div></div></a><a class="pagination-related" href="/posts/a90dbf1.html" title="网络编程懒人入门（三）:快速理解TCP协议一篇就够"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-09</div><div class="info-item-2">网络编程懒人入门（三）:快速理解TCP协议一篇就够</div></div><div class="info-2"><div class="info-item-1">前言本系列文章的前两篇《网络编程懒人入门(一)：快速理解网络通信协议（上篇）》、《网络编程懒人入门(二)：快速理解网络通信协议（下篇）》快速介绍了网络基本通信协议及理论基础，建议开始阅读本文前先读完此2篇文章。 TCP 是互联网的核心协议之一，鉴于它的重要性，本文将单独介绍它的基础知识，希望能加深您对TCP协议的理解。 老规矩，为了让文字尽量通俗易懂、不浪费你的脑细胞，本文尽量点到为止，不对理论进行深入挖掘，如需深入理论细节，请参见下方参考资料中有关TCP协议的详细介绍和学习文章。 群神镇楼：  TCP 协议的作用互联网由一整套协议构成。TCP 只是其中的一层，有着自己的分工。  ▲ TCP 是以太网协议和 IP 协议的上层协议，也是应用层协议的下层协议 最底层的以太网协议（Ethernet）规定了电子信号如何组成数据包（packet），解决了子网内部的点对点通信。  ▲ 以太网协议解决了局域网的点对点通信 但是，以太网协议不能解决多个局域网如何互通，这由 IP 协议解决。  ▲ IP 协议可以连接多个局域网 IP 协议定义了一套自己的地址规则，称为 IP...</div></div></div></a><a class="pagination-related" href="/posts/1750dad.html" title="网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-09</div><div class="info-item-2">网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势</div></div><div class="info-2"><div class="info-item-1">前言对于即时通讯开者新手来说，在开始着手编写IM或消息推送系统的代码前，最头疼的问题莫过于到底该选TCP还是UDP作为传输层协议。本文延续《网络编程懒人入门》系列文章的风格，通过快速对比分析 TCP 和 UDP...</div></div></div></a><a class="pagination-related" href="/posts/2de5e4a.html" title="网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-09</div><div class="info-item-2">网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？</div></div><div class="info-2"><div class="info-item-1">前言标题虽然是为了解释有了 IP 地址，为什么还要用 MAC 地址，但是本文的重点在于理解为什么要有 IP 这样的东西。本文对读者的定位是知道 MAC 地址是什么，IP 地址是什么。 关于作者 翟志军，个人博客地址：https://showme.codes/，Github：https://github.com/zacker330。感谢作者的原创分享。 书上说的*基本概念：* 如今的网络是分层来实现的，就像是搭积木一样，先设计某个特定功能的模块，然后把模块拼起来组成整个网络。局域网也不例外，一般来说，在组网上我们使用的是[IEEE802](https://baike.baidu.com/item/IEEE...</div></div></div></a><a class="pagination-related" href="/posts/7b1a8364.html" title="网络编程懒人入门（二）:快速理解网络通信协议（下篇）"><img class="cover" src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-09</div><div class="info-item-2">网络编程懒人入门（二）:快速理解网络通信协议（下篇）</div></div><div class="info-2"><div class="info-item-1">前言本文上篇《网络编程懒人入门(一)：快速理解网络通信协议（上篇）》分析了互联网的总体构思，从下至上，每一层协议的设计思想。基于知识连贯性的考虑，建议您先看完上篇后再来阅读本文。 本文从设计者的角度看问题，今天我想切换到用户的角度，看看用户是如何从上至下，与这些协议互动的。 一个小结先对前面的内容，做一个小结（详见本文上篇《网络编程懒人入门(一)：快速理解网络通信协议（上篇）》）。 我们已经知道，网络通信就是交换数据包。电脑A向电脑B发送一个数据包，后者收到了，回复一个数据包，从而实现两台电脑之间的通信。 数据包的结构，基本上是下面这样：  发送这个包，需要知道两个地址：  * 对方的MAC地址； *...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/dbec14fc4bb3795ba2556e8a82eaee0f.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">KNeegcyao</div><div class="author-info-description">记录coding！</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/KNeegcyao"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/KNeegcyao" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:zhangchao2903@163.com.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=322815684" target="_blank" title="云音乐"><i class="fa-solid fa-music"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E7%90%86%E8%A7%A3TCP-IP%E5%8D%8F%E8%AE%AE%E7%B0%87"><span class="toc-number">2.</span> <span class="toc-text">快速理解TCP&#x2F;IP协议簇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E7%90%86%E8%A7%A3UDP%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.</span> <span class="toc-text">快速理解UDP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E6%97%A0%E8%BF%9E%E6%8E%A5"><span class="toc-number">3.2.</span> <span class="toc-text">面向无连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E5%8D%95%E6%92%AD%E3%80%81%E5%A4%9A%E6%92%AD%E3%80%81%E5%B9%BF%E6%92%AD"><span class="toc-number">3.3.</span> <span class="toc-text">支持单播、多播、广播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E6%8A%A5%E6%96%87"><span class="toc-number">3.4.</span> <span class="toc-text">面向报文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">3.5.</span> <span class="toc-text">不可靠性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%B4%E9%83%A8%E5%BC%80%E9%94%80%E5%B0%8F"><span class="toc-number">3.6.</span> <span class="toc-text">头部开销小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%85%A8%E9%9D%A2%E5%9C%B0%E5%AD%A6%E4%B9%A0UDP%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.7.</span> <span class="toc-text">更全面地学习UDP协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E7%90%86%E8%A7%A3TCP%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.</span> <span class="toc-text">快速理解TCP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">4.1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E8%BF%9E%E6%8E%A5%E8%BF%87%E7%A8%8B%EF%BC%883%E6%AC%A1%E6%8F%A1%E6%89%8B%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">TCP连接过程（3次握手）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E6%96%AD%E5%BC%80%E9%93%BE%E6%8E%A5%EF%BC%884%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">TCP断开链接（4次挥手）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E5%8D%8F%E8%AE%AE%E8%A6%81%E7%82%B9%E5%BD%92%E7%BA%B3"><span class="toc-number">4.4.</span> <span class="toc-text">TCP协议要点归纳</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%85%A8%E9%9D%A2%E5%9C%B0%E5%AD%A6%E4%B9%A0TCP%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.5.</span> <span class="toc-text">更全面地学习TCP协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B"><span class="toc-number">5.</span> <span class="toc-text">总结一下</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/a90dbf1.html" title="网络编程懒人入门（三）:快速理解TCP协议一篇就够"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（三）:快速理解TCP协议一篇就够"/></a><div class="content"><a class="title" href="/posts/a90dbf1.html" title="网络编程懒人入门（三）:快速理解TCP协议一篇就够">网络编程懒人入门（三）:快速理解TCP协议一篇就够</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1750dad.html" title="网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势"/></a><div class="content"><a class="title" href="/posts/1750dad.html" title="网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势">网络编程懒人入门（五）:快速理解为什么说UDP有时比TCP更有优势</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/2de5e4a.html" title="网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？"/></a><div class="content"><a class="title" href="/posts/2de5e4a.html" title="网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？">网络编程懒人入门（九）:通俗讲解，有了IP地址，为何还要用MAC地址？</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b0dbfb54.html" title="网络编程懒人入门（七）:深入浅出，全面理解HTTP协议"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（七）:深入浅出，全面理解HTTP协议"/></a><div class="content"><a class="title" href="/posts/b0dbfb54.html" title="网络编程懒人入门（七）:深入浅出，全面理解HTTP协议">网络编程懒人入门（七）:深入浅出，全面理解HTTP协议</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/eb6629b4.html" title="网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门"><img src="https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/fe81-a812480cc707e9a68269ec7e4bd1df80.jpg " onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门"/></a><div class="content"><a class="title" href="/posts/eb6629b4.html" title="网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门">网络编程懒人入门（六）:史上最通俗的集线器、交换机、路由器功能原理入门</a><time datetime="2024-12-09T07:24:59.000Z" title="发表于 2024-12-09 15:24:59">2024-12-09</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://haowallpaper.com/link/common/file/previewFileImg/f351ca6264cb84d5053926824a04634af351ca6264cb84d5053926824a04634a);"><div id="footer-wrap"><div class="copyright">&copy;2024 By KNeegcyao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.8" zIndex="-1" count="200" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="Java,Spring,k8s,MVC,Redis,Mysql,JVM,Maven,Docker" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
