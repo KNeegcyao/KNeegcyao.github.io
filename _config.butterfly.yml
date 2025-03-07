@@ -88,8 +88,8 @@ category_img: https://haowallpaper.com/link/common/file/previewFileImg/b72259033
 # The banner image of category page, you can set the banner image for each category
 # Format:
 #  - category name: xxxxx
-category_per_img: https://haowallpaper.com/link/common/file/previewFileImg/b72259033268fc0c35f70cf39e7592e5b72259033268fc0c35f70cf39e7592e5
-
+category_per_img: 
+  -计算机网络: https://cn.bing.com/images/search?view=detailV2&ccid=rdlR9s9q&id=4A26A4E14EAC5CF87FB9CAE53D0A596142A197B5&thid=OIP.rdlR9s9qPvwhojb-Pw4iegHaFj&mediaurl=https%3a%2f%2fts1.cn.mm.bing.net%2fth%2fid%2fR-C.add951f6cf6a3efc21a236fe3f0e227a%3frik%3dtZehQmFZCj3lyg%26riu%3dhttp%253a%252f%252fwww.kuaipng.com%252fUploads%252fpic%252fw%252f2018%252f09-12%252f47900%252fwater_47900_698_523.5_.png%26ehk%3d%252fMBZ6mufrhy94wpK%252ffp29LkihqN%252f8wv5UwVU4F4cvJ8%253d%26risl%3d%26pid%3dImgRaw%26r%3d0&exph=523&expw=698&q=%e7%bd%91%e7%bb%9c%e9%ab%98%e6%b8%85%e5%9b%be%e7%89%87+-site%3a*.csdn.net&simid=607987578430702350&FORM=IRPRST&ck=B117DC233A3935F96E7A438774553A63&selectedIndex=118&itb=0
 # The background image of footer
 footer_img: true
 
@@ -169,7 +169,7 @@ subtitle:
   sub:
     - Never give up!
     - 坚持！
-
+    - 求其上，得其中；求其中，得其下；求其下，则无所得！
 # Article layout on the homepage
 # 1: Cover on the left, info on the right
 # 2: Cover on the right, info on the left
@@ -526,14 +526,14 @@ comments:
   # Leave it empty if you don't need comments
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # Format of two comments system : Disqus,Waline
-  use:
+  use: Gitalk
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
   # If you set it to true, the comment count will be invalid
   lazyload: false
   # Display comment count in post's top_img
-  count: false
+  count: true
   # Display comment count in Home Page
   card_post_count: false
 
@@ -654,12 +654,12 @@ artalk:
 chat:
   # Choose: chatra/tidio/crisp
   # Leave it empty if you don't need chat
-  use:
+  use: chatra
   # Chat Button [recommend]
   # It will create a button in the bottom right corner of website, and hide the origin button
-  rightside_button: true
+  rightside_button: false
   # The origin chat button is displayed when scrolling up, and the button is hidden when scrolling down
-  button_hide_show: true
+  button_hide_show: false
 
 # https://chatra.io/
 chatra:
@@ -901,7 +901,7 @@ clickShowText:
 # https://github.com/francoischalifour/medium-zoom
 # https://fancyapps.com/fancybox/
 # Leave it empty if you don't need lightbox
-lightbox: https://fancyapps.com/fancybox/
+lightbox: //github.com/francoischalifour/medium-zoom
 
 # --------------------------------------
 # Tag Plugins settings

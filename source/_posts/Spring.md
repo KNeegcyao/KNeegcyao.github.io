@@ -1,13 +1,15 @@
 ---
 title: Spring
-date: 2024-12-03 14:24:59
-tags: 
-  - Java 
+tags:
+  - Java
   - 基础知识
 categories:
   - 后端框架
-top_img: https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/2560px-Spring_Framework_Logo_2018.svg.png
-cover: https://th.bing.com/th/id/OIP.rDUfy0IgEjbmyx_1aRv7dAHaEv?rs=1&pid=ImgDetMain
+top_img: >-
+  https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/2560px-Spring_Framework_Logo_2018.svg.png
+cover: 'https://cdn.jsdelivr.net/gh/KNeegcyao/picdemo/img/20241206224728342.png'
+abbrlink: 6c92115f
+date: 2024-12-04 14:24:59
 ---
 
 # Spring介绍
